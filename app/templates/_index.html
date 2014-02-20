@@ -1,0 +1,31 @@
+`import cn.uc.actplat.sdk.response.userinfo.QueryUserInfoResponse.QueryUserInfo
+`args QueryUserInfo userInfo
+
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+    <title><%= _.slugify(actName) %></title>
+    <link rel="stylesheet" type="text/css" href="public/css/reset.css">
+</head>
+
+<body>
+    <section id="page-index">
+        page index
+    </section>
+
+    <script src="public/js/seajs/sea.js"></script>
+    <script>
+        seajs.config({
+            alias: {
+                'avalon': 'avalon/avalon.mobile.js'
+            }
+        });
+        seajs.use('core/page', function (page) {
+            page.start('index');
+        });
+    </script>
+</body>
+</html>

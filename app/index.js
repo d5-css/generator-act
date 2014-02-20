@@ -28,24 +28,38 @@ var ActGenerator = yeoman.generators.Base.extend({
     var prompts = [{
       name: 'actName',
       message: 'Would you like to call this activity?'
+    // }, {
+    //   name: 'actVersion',
+    //   message: 'What\'s the version of this project?',
+    //   default: '1\.0\.0'
     }];
 
     this.prompt(prompts, function (props) {
       this.actName = props.actName;
+      // this.actVersion = props.actVersion;
       done();
     }.bind(this));
   },
 
   app: function () {
-    this.mkdir('app');
-    this.mkdir('app/templates');
-
+    // this.template('_bower.json', 'bower.json');
     this.template('_package.json', 'package.json');
-    this.template('_bower.json', 'bower.json');
+    this.template('bowerrc', '.bowerrc');
+    this.copy('Gruntfile.js', 'Gruntfile.js');
   },
 
   projectfiles: function () {
-    this.copy('jshintrc', '.jshintrc');
+    this.template('_index.html', 'index.html');
+
+    this.mkdir('public');
+    this.mkdir('public/css');
+    this.mkdir('public/js');
+    this.copy('public/css/base.css', 'public/css/base.css');
+    this.copy('jshintrc', 'public/.jshintrc');
+  },
+
+  bower: function () {
+    this.bowerInstall(['vue'], { save: true });
   }
 });
 
