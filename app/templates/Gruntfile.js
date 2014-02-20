@@ -11,10 +11,10 @@ module.exports = function (grunt) {
         },
         jshint: {
             all: [
-                '../public/js/core/*.js',
-                '../public/js/component/*.js',
-                '../public/js/widget/*.js',
-                '../public/js/page/*.js'
+                'src/public/js/**/*.js'
+            ],
+            ignores: [
+                'src/public/js/lib/*.js'
             ],
             options: {
                 bitwise: true,
@@ -45,14 +45,14 @@ module.exports = function (grunt) {
         },
         cmd: {
             options: {
-                base: '../public/js/',
+                base: 'src/public/js/',
                 shim: {}
             },
             all: {
                 src: [
-                    '../public/js/*/*.js'
+                    'src/public/js/**/*.js'
                 ],
-                dest: '../public/compiled'
+                dest: 'src/public/compiled'
             }
         },
         pack: {
@@ -60,10 +60,9 @@ module.exports = function (grunt) {
                 type: 'css',
                 src: [
                     '<%= meta.banner %>',
-                    '../public/css/style.css',
-                    '../public/css/mascot.css',
+                    'src/public/css/**/*.css',
                 ],
-                dest: '../public/css/style.min.css'
+                dest: 'src/public/css/style.min.css'
             },
             app: {
                 type: 'js',
@@ -79,7 +78,7 @@ module.exports = function (grunt) {
                     '<%= cmd.all.dest %>/widget/*.js',
                     '<%= cmd.all.dest %>/page/*.js'
                 ],
-                dest: '../public/js/app.min.js'
+                dest: 'src/public/js/app.min.js'
             }
         }
     });

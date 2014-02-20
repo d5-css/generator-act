@@ -31,7 +31,7 @@ var ActGenerator = yeoman.generators.Base.extend({
     // }, {
     //   name: 'actVersion',
     //   message: 'What\'s the version of this project?',
-    //   default: '1\.0\.0'
+    //   default: '1.0.0'
     }];
 
     this.prompt(prompts, function (props) {
@@ -42,23 +42,35 @@ var ActGenerator = yeoman.generators.Base.extend({
   },
 
   app: function () {
-    // this.template('_bower.json', 'bower.json');
     this.template('_package.json', 'package.json');
-    this.template('bowerrc', '.bowerrc');
-    this.copy('Gruntfile.js', 'Gruntfile.js');
   },
 
   projectfiles: function () {
-    this.template('_index.html', 'index.html');
+    this.mkdir('src');
+    this.copy('src/jshintrc', 'src/.jshintrc');
+    this.template('src/_index.html', 'src/index.html');
 
-    this.mkdir('public');
-    this.mkdir('public/css');
-    this.mkdir('public/js');
-    this.copy('public/css/base.css', 'public/css/base.css');
-    this.copy('jshintrc', 'public/.jshintrc');
+    this.mkdir('src/public');
+    this.mkdir('src/public/js');
+    this.mkdir('src/public/css');
+    this.mkdir('src/public/images');
+    this.copy('src/public/css/base.css', 'src/public/css/base.css');
+  },
+
+  grunt: function () {
+    this.mkdir('tasks');
+    this.copy('tasks/cmd_compile.js', 'tasks/cmd_compile.js');
+    this.copy('tasks/cmd_pack.js', 'tasks/cmd_pack.js');
+    this.copy('tasks/lib/cmd.js', 'tasks/lib/cmd.js');
+    this.copy('tasks/lib/cssmin.js', 'tasks/lib/cssmin.js');
+    this.copy('tasks/lib/lang.js', 'tasks/lib/lang.js');
+    this.copy('tasks/lib/util.js', 'tasks/lib/util.js');
+    this.copy('Gruntfile.js', 'Gruntfile.js');
   },
 
   bower: function () {
+    // this.template('_bower.json', 'bower.json');
+    this.template('bowerrc', '.bowerrc');
     this.bowerInstall(['vue'], { save: true });
   }
 });
