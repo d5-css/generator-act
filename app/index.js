@@ -54,6 +54,8 @@ var ActGenerator = yeoman.generators.Base.extend({
     this.mkdir('src/public/js');
     this.mkdir('src/public/css');
     this.mkdir('src/public/images');
+    this.copy('src/public/js/core/page.js', 'src/public/js/core/page.js');
+    this.copy('src/public/js/page/index.js', 'src/public/js/page/index.js');
     this.copy('src/public/css/base.css', 'src/public/css/base.css');
   },
 
@@ -72,6 +74,7 @@ var ActGenerator = yeoman.generators.Base.extend({
     // this.template('_bower.json', 'bower.json');
     this.template('bowerrc', '.bowerrc');
     this.bowerInstall(['vue'], { save: true });
+    this.bowerInstall(['git@github.com:seajs/seajs.git'], { save: true });
   }
 });
 

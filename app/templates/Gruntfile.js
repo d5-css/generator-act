@@ -39,7 +39,7 @@ module.exports = function (grunt) {
                 devel: true,
                 jquery: true,
                 node: true,
-                predef: ['seajs', 'define'],
+                predef: ['seajs', 'define', 'Vue'],
                 white: false
             }
         },
@@ -62,7 +62,7 @@ module.exports = function (grunt) {
                     '<%= meta.banner %>',
                     'src/public/css/**/*.css',
                 ],
-                dest: 'src/public/css/style.min.css'
+                dest: 'src/public/dist/style.min.css'
             },
             app: {
                 type: 'js',
@@ -78,7 +78,7 @@ module.exports = function (grunt) {
                     '<%= cmd.all.dest %>/widget/*.js',
                     '<%= cmd.all.dest %>/page/*.js'
                 ],
-                dest: 'src/public/js/app.min.js'
+                dest: 'src/public/dist/app.min.js'
             }
         }
     });

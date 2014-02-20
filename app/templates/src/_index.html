@@ -5,7 +5,7 @@
     <meta http-equiv="Cache-Control" content="no-cache" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
     <title><%= _.slugify(actName) %></title>
-    <link rel="stylesheet" type="text/css" href="public/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="public/css/base.css">
 </head>
 
 <body>
@@ -13,12 +13,11 @@
         page index
     </section>
 
-    <script src="public/js/seajs/sea.js"></script>
+    <script src="public/bower/vue/dist/vue.js"></script>
+    <script src="public/bower/seajs/dist/sea.js"></script>
     <script>
         seajs.config({
-            alias: {
-                'vue': '../bower/vue/dist/vue.min.js'
-            }
+            base: './public/js'
         });
         seajs.use('core/page', function (page) {
             page.start('index');
