@@ -27,7 +27,8 @@ var ActGenerator = yeoman.generators.Base.extend({
 
     var prompts = [{
       name: 'actName',
-      message: 'Would you like to call this activity?'
+      message: 'Would you like to call this activity?',
+      default: 'UC Activity'
     // }, {
     //   name: 'actVersion',
     //   message: 'What\'s the version of this project?',
@@ -47,16 +48,17 @@ var ActGenerator = yeoman.generators.Base.extend({
 
   projectfiles: function () {
     this.mkdir('src');
-    this.copy('src/jshintrc', 'src/.jshintrc');
-    this.template('src/_index.html', 'src/index.html');
+    this.copy('jshintrc', '.jshintrc');
+    this.template('_index.html', 'index.html');
 
-    this.mkdir('src/public');
-    this.mkdir('src/public/js');
-    this.mkdir('src/public/css');
-    this.mkdir('src/public/images');
-    this.copy('src/public/js/core/page.js', 'src/public/js/core/page.js');
-    this.copy('src/public/js/page/index.js', 'src/public/js/page/index.js');
-    this.copy('src/public/css/base.css', 'src/public/css/base.css');
+    this.mkdir('public');
+    this.mkdir('public/js');
+    this.mkdir('public/css');
+    this.mkdir('public/images');
+    this.copy('public/js/seajs/sea.js', 'public/js/seajs/sea.js');
+    this.copy('public/js/core/page.js', 'public/js/core/page.js');
+    this.copy('public/js/page/index.js', 'public/js/page/index.js');
+    this.copy('public/css/base.css', 'public/css/base.css');
   },
 
   grunt: function () {
@@ -71,10 +73,10 @@ var ActGenerator = yeoman.generators.Base.extend({
   },
 
   bower: function () {
-    // this.template('_bower.json', 'bower.json');
+    this.template('_bower.json', 'bower.json');
     this.template('bowerrc', '.bowerrc');
     this.bowerInstall(['vue'], { save: true });
-    this.bowerInstall(['git@github.com:seajs/seajs.git'], { save: true });
+    // this.bowerInstall(['git@github.com:seajs/seajs.git'], { save: true });
   }
 });
 

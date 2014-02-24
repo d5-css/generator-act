@@ -1,7 +1,3 @@
-/**
- * Gruntfile for Elf Project
- */
-
 module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -11,10 +7,7 @@ module.exports = function (grunt) {
         },
         jshint: {
             all: [
-                'src/public/js/**/*.js'
-            ],
-            ignores: [
-                'src/public/js/lib/*.js'
+                'public/js/**/*.js'
             ],
             options: {
                 bitwise: true,
@@ -40,19 +33,23 @@ module.exports = function (grunt) {
                 jquery: true,
                 node: true,
                 predef: ['seajs', 'define', 'Vue'],
-                white: false
+                white: false,
+
+                ignores: [
+                    'public/js/seajs/*.js'
+                ],
             }
         },
         cmd: {
             options: {
-                base: 'src/public/js/',
+                base: 'public/js/',
                 shim: {}
             },
             all: {
                 src: [
-                    'src/public/js/**/*.js'
+                    'public/js/**/*.js'
                 ],
-                dest: 'src/public/compiled'
+                dest: 'public/compiled'
             }
         },
         pack: {
@@ -60,9 +57,9 @@ module.exports = function (grunt) {
                 type: 'css',
                 src: [
                     '<%= meta.banner %>',
-                    'src/public/css/**/*.css',
+                    'public/css/**/*.css',
                 ],
-                dest: 'src/public/dist/style.min.css'
+                dest: 'public/dist/style.min.css'
             },
             app: {
                 type: 'js',
@@ -71,6 +68,7 @@ module.exports = function (grunt) {
                 },
                 src: [
                     '<%= meta.banner %>',
+                    'public/bower/vue/dist/vue.js',
                     '<%= cmd.all.dest %>/seajs/sea.js',
                     '<%= cmd.all.dest %>/avalon/*.js',
                     '<%= cmd.all.dest %>/core/*.js',
@@ -78,14 +76,22 @@ module.exports = function (grunt) {
                     '<%= cmd.all.dest %>/widget/*.js',
                     '<%= cmd.all.dest %>/page/*.js'
                 ],
-                dest: 'src/public/dist/app.min.js'
+                dest: 'public/dist/app.min.js'
+            }
+        },
+        processhtml: {
+            dist: {
+                files: {
+                    'index-release.html': ['index.html']
+                }
             }
         }
     });
 
     grunt.loadTasks('tasks');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-processhtml');
 
     // public tasks
-    grunt.registerTask('default', ['jshint', 'cmd', 'pack']);
+    grunt.registerTask('default', ['jshint', 'cmd', 'pack', 'processhtml']);
 };

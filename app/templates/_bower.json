@@ -1,8 +1,16 @@
 {
   "name": "<%= _.slugify(actName) %>",
   "version": "1.0.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src/public/bower",
+    "test",
+    "tests"
+  ],
   "dependencies": {
-    "vue": "0.8.6"
+    "vue": "~0.8.8"
   }
 }
 

@@ -1,10 +1,11 @@
 {
-  "name": "<%= _.slugify(actName) %>",
+  "name": "cricket",
   "version": "1.0.0",
   "private": true,
   "devDependencies": {
     "grunt": "~0.4.0",
     "grunt-contrib-jshint": ">=0.1.0",
+    "grunt-processhtml": ">=0.3.0",
     "glob-whatev": ">=0.1.8",
     "uglify-js": ">=2.2.4",
     "cmd-util": ">=0.2.0"

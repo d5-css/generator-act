@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title><%= _.slugify(actName) %></title>
+    <!-- build:css css/style.min.css -->
+    <link rel="stylesheet" type="text/css" href="public/css/base.css">
+    <!-- /build -->
+</head>
+
+<body>
+    <section id="page-index">
+        page index
+    </section>
+
+    <!-- build:js js/app.min.js -->
+    <script src="bower/vue/dist/vue.js"></script>
+    <script src="public/js/seajs/sea.js"></script>
+    <!-- /build -->
+    <script>
+        seajs.use('core/page', function (page) {
+            page.start('index');
+        });
+    </script>
+</body>
+</html>
