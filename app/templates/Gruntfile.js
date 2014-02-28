@@ -70,11 +70,7 @@ module.exports = function (grunt) {
                     '<%= meta.banner %>',
                     'public/bower/vue/dist/vue.js',
                     '<%= cmd.all.dest %>/seajs/sea.js',
-                    '<%= cmd.all.dest %>/avalon/*.js',
-                    '<%= cmd.all.dest %>/core/*.js',
-                    '<%= cmd.all.dest %>/component/*.js',
-                    '<%= cmd.all.dest %>/widget/*.js',
-                    '<%= cmd.all.dest %>/page/*.js'
+                    '<%= cmd.all.dest %>/**/*.js'
                 ],
                 dest: 'public/dist/app.min.js'
             }
@@ -82,7 +78,7 @@ module.exports = function (grunt) {
         processhtml: {
             dist: {
                 files: {
-                    'index-release.html': ['index.html']
+                    'index_release.html': ['index.html']
                 }
             }
         }

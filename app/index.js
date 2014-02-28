@@ -47,7 +47,6 @@ var ActGenerator = yeoman.generators.Base.extend({
   },
 
   projectfiles: function () {
-    this.mkdir('src');
     this.copy('jshintrc', '.jshintrc');
     this.template('_index.html', 'index.html');
 
