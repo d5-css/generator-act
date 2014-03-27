@@ -29,15 +29,16 @@ var ActGenerator = yeoman.generators.Base.extend({
       name: 'actName',
       message: 'Would you like to call this activity?',
       default: 'UC Activity'
-    // }, {
-    //   name: 'actVersion',
-    //   message: 'What\'s the version of this project?',
-    //   default: '1.0.0'
+    }, {
+      type: 'confirm',
+      name: 'neeUpload',
+      message: 'Would you like to upload files in your project?',
+      default: false
     }];
 
     this.prompt(prompts, function (props) {
       this.actName = props.actName;
-      // this.actVersion = props.actVersion;
+      this.neeUpload = props.neeUpload;
       done();
     }.bind(this));
   },
@@ -56,6 +57,8 @@ var ActGenerator = yeoman.generators.Base.extend({
     this.mkdir('public/images');
     this.copy('public/js/seajs/sea.js', 'public/js/seajs/sea.js');
     this.copy('public/js/core/page.js', 'public/js/core/page.js');
+    this.copy('public/js/core/page.js', 'public/js/core/page.js');
+    this.copy('public/js/core/net' + (this.neeUpload ? '' : '-lite') + '.js', 'public/js/core/net.js');
     this.copy('public/js/page/index.js', 'public/js/page/index.js');
     this.copy('public/css/base.css', 'public/css/base.css');
   },
@@ -74,8 +77,7 @@ var ActGenerator = yeoman.generators.Base.extend({
   bower: function () {
     this.template('_bower.json', 'bower.json');
     this.template('bowerrc', '.bowerrc');
-    this.bowerInstall(['vue'], { save: true });
-    // this.bowerInstall(['git@github.com:seajs/seajs.git'], { save: true });
+    // this.bowerInstall(['vue'], { save: true });
   }
 });
 

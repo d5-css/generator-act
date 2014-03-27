@@ -27,21 +27,21 @@ define(function (require, exports) {
     exports.start = function (defaultPage) {
         if (!running) {
             if (hasAddEventListener) {
-                window.addEventListener('hashchange', onhashchange, false);
+                window.addEventListener('hashchange', onHashChange, false);
             } else if (hasHashChangeEvent) {
-                window.onhashchange = onhashchange;
+                window.onhashchange = onHashChange;
             }
             running = true;
             showDefaultPage = (typeof defaultPage) === 'string' ? function () {
                     location.replace('#!/' + defaultPage);
                 } : function () {};
-            onhashchange({
+            onHashChange({
                 newURL: window.location.href,
                 oldURL: undefined
             });
         }
     };
-    function onhashchange(e) {
+    function onHashChange(e) {
         if (running) {
             var ctx = parseURL(e.newURL),
                 opts = {
@@ -69,7 +69,7 @@ define(function (require, exports) {
         // Fragment shouldn't contain `&`, use `!!` instead
         // http://tools.ietf.org/html/rfc3986
         // @example #!/wallpaper?super=beauty!!sub=nude
-        var pairs = search.split('!!'),
+        var pairs = search.split(/!!|&/),
             state = {};
         for (var j = 0; j < pairs.length; j++) {
             var pair = pairs[j].replace(/\+/g, '%20'),
@@ -115,4 +115,25 @@ define(function (require, exports) {
             }
         });
     }
+/*
+    exports.replace = function (page, state) {
+        var ctx = parseURL('#!/' + page),
+            url = '#!/' + ctx.page + '?',
+            addParams = function (obj) {
+                var prop;
+                if (obj) {
+                    for (prop in obj) {
+                        if (prop && obj.hasOwnProperty(prop)) {
+                            url += '!!' + prop + '=' + encodeURIComponent(obj[prop]);
+                        }
+                    }
+
+                }
+            };
+        addParams(ctx.state);
+        addParams(state);
+        url = url.replace('?!!', '?').replace(/\?$/, '');
+        location.replace(url);
+    };
+*/
 });

@@ -38,6 +38,7 @@ module.exports = function (grunt) {
             base = config.base,
             shim = config.shim,
             src = grunt.file.expand(options.src),
+            ignores = grunt.file.expand(options.ignores || []),
             dest = options.dest,
             CODE_BEGIN = 'define(function(require,exports,module){module.exports=',
             CODE_END = ';});';
@@ -64,6 +65,9 @@ module.exports = function (grunt) {
         });
 
         src.forEach(function (file) {
+            if (ignores.indexOf(file) >= 0) {
+                return;
+            }
             var code = grunt.file.read(file),
                 // only process the first module in file
                 meta = ast.parse(code)[0],

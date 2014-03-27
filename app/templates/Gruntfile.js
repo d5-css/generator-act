@@ -1,9 +1,8 @@
-module.exports = function (grunt) {
+module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         meta: {
-            banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-                '<%= grunt.template.today("yyyy-mm-dd") %> */'
+            banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %> */'
         },
         jshint: {
             all: [
@@ -36,8 +35,14 @@ module.exports = function (grunt) {
                 white: false,
 
                 ignores: [
-                    'public/js/seajs/*.js'
+                    'public/js/seajs/*.js',
+                    'public/js/cmp/*.js'
                 ],
+            }
+        },
+        bower: {
+            cmp: {
+                dest: 'public/js/cmp'
             }
         },
         cmd: {
@@ -48,6 +53,9 @@ module.exports = function (grunt) {
             all: {
                 src: [
                     'public/js/**/*.js'
+                ],
+                ignores: [
+                    'public/js/cmp/vue.js',
                 ],
                 dest: 'public/compiled'
             }
@@ -68,7 +76,7 @@ module.exports = function (grunt) {
                 },
                 src: [
                     '<%= meta.banner %>',
-                    'public/bower/vue/dist/vue.js',
+                    'public/js/cmp/vue.js',
                     '<%= cmd.all.dest %>/seajs/sea.js',
                     '<%= cmd.all.dest %>/**/*.js'
                 ],
@@ -81,13 +89,18 @@ module.exports = function (grunt) {
                     'index_release.html': ['index.html']
                 }
             }
+        },
+        clean: {
+            cmd: ['<%= cmd.all.dest %>']
         }
     });
 
     grunt.loadTasks('tasks');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-bower');
     grunt.loadNpmTasks('grunt-processhtml');
 
     // public tasks
-    grunt.registerTask('default', ['jshint', 'cmd', 'pack', 'processhtml']);
+    grunt.registerTask('default', ['jshint', 'cmd', 'pack', 'processhtml', 'clean']);
 };
