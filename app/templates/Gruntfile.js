@@ -9,31 +9,7 @@ module.exports = function(grunt) {
                 'public/js/**/*.js'
             ],
             options: {
-                bitwise: true,
-                camelcase: true,
-                curly: true,
-                eqeqeq: true,
-                forin: true,
-                immed: true,
-                indent: 4,
-                latedef: true,
-                newcap: true,
-                noarg: true,
-                noempty: true,
-                nonew: true,
-                quotmark: 'single',
-                undef: true,
-                unused: true,
-                strict: true,
-                trailing: true,
-                eqnull: true,
-                browser: true,
-                devel: true,
-                jquery: true,
-                node: true,
-                predef: ['seajs', 'define', 'Vue'],
-                white: false,
-
+                jshintrc: '.jshintrc',
                 ignores: [
                     'public/js/seajs/*.js',
                     'public/js/cmp/*.js'
@@ -112,13 +88,13 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.loadTasks('tasks');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-bower');
     grunt.loadNpmTasks('grunt-bower-install');
+    grunt.loadNpmTasks('grunt-cmd');
     grunt.loadNpmTasks('grunt-processhtml');
 
     // public tasks

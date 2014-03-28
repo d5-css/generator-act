@@ -64,20 +64,12 @@ var ActGenerator = yeoman.generators.Base.extend({
   },
 
   grunt: function () {
-    this.mkdir('tasks');
-    this.copy('tasks/cmd_compile.js', 'tasks/cmd_compile.js');
-    this.copy('tasks/cmd_pack.js', 'tasks/cmd_pack.js');
-    this.copy('tasks/lib/cmd.js', 'tasks/lib/cmd.js');
-    this.copy('tasks/lib/cssmin.js', 'tasks/lib/cssmin.js');
-    this.copy('tasks/lib/lang.js', 'tasks/lib/lang.js');
-    this.copy('tasks/lib/util.js', 'tasks/lib/util.js');
     this.copy('Gruntfile.js', 'Gruntfile.js');
   },
 
   bower: function () {
     this.template('_bower.json', 'bower.json');
     this.template('bowerrc', '.bowerrc');
-    // this.bowerInstall(['vue'], { save: true });
   }
 });
 
