@@ -15,7 +15,9 @@ var CmpGenerator = yeoman.generators.NamedBase.extend({
         bower.commands
           .install([cmpName], {save: true})
           .on('end', function (installed) {
+            // Vue 不是 seajs 模块，需要直接插入到页面中
             that.spawnCommand('grunt', ['bowerInstall']);
+            // 将 bower 下载的代码复制到项目中去
             that.spawnCommand('grunt', ['bower']);
           });
       } else {
@@ -23,6 +25,7 @@ var CmpGenerator = yeoman.generators.NamedBase.extend({
         bower.commands
           .install([cmpName])
           .on('end', function (installed) {
+            // 将 bower 下载的代码复制到项目中去
             that.spawnCommand('grunt', ['bower']);
           });
       }

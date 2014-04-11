@@ -1,17 +1,3 @@
-/**
- * page.js 
- * 新设计的路由类，实现类似后端MVC的原理，实现路由和页面控制类的直接映射规则，从而使路由控制与页面解耦
- * 约定：
- * 1、hash规则 #!/{pageName}?param1=XXX!!param2=YYY
- * 2、页面定义采用语义标签，section#pagename > header + div.content + footer
- * 3、将页面控制类放到/js/page/{pagename}.js
- * 4、页面对应的模版放在/tpl/page/{pagename}.tpl
- * 
- * 实现原理如下：
- * 1、监听window.onhashchange事件，
- * 2、根据e.oldURL中oldPageName找到oldPage控制类，调用oldPage.exit()，该方法将隐藏dom中id为oldPageName的元素
- * 3、根据e.newURL中newPageName找到newPage控制类，调用newPage.enter()（如果dom还没有oldPageName元素，则获取模版渲染后插入dom）
- */
 /*jshint bitwise: false */
 define(function (require, exports) {
     'use strict';
@@ -115,6 +101,7 @@ define(function (require, exports) {
             }
         });
     }
+
 /*
     exports.replace = function (page, state) {
         var ctx = parseURL('#!/' + page),
