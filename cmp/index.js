@@ -43,13 +43,6 @@ var CmpGenerator = yeoman.generators.NamedBase.extend({
           // clean:bower: 清空 bower 文件
           that.spawnCommand('grunt', ['bowerInstall', 'bower', 'clean:bower']);
         });
-    } else if (this.name === 'test') {
-      cmpName = 'git@git.ucweb.local:chenhc/cmp-' + this.name + '.git#' + this.ver;
-      bower.commands
-        .install([cmpName])
-        .on('end', function (installed) {
-          that.spawnCommand('grunt', ['bower', 'clean:bower']);
-        });
     } else {
       cmpName = 'git@git.ucweb.local:pf/cmp-' + this.name + '.git#' + this.ver;
       bower.commands
