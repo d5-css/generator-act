@@ -84,6 +84,7 @@ module.exports = function(grunt) {
         },
         // 清除 cmd 生成的文件
         clean: {
+            bower: ['bower_components'],
             cmd: ['<%= cmd.all.dest %>']
         }
     });
@@ -105,6 +106,6 @@ module.exports = function(grunt) {
         'uglify',
         'cssmin',
         'processhtml',
-        'clean'
+        'clean:cmd'
     ]);
 };

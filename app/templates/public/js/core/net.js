@@ -336,6 +336,9 @@ define(function (require, exports) {
 
     // 创建 options
     function createOptions(args) {
+        if (args.length === 1 && getType('args') === 'object') {
+            return args;
+        }
         var p,
             options = {
                 url: args[0]
