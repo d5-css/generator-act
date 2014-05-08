@@ -17,7 +17,9 @@ var ActGenerator = yeoman.generators.Base.extend({
   },
 
   askFor: function () {
-    var done = this.async();
+    var done = this.async(),
+      destBasePath = (this.src._destBase || '').split('/'),
+      defaultActName = destBasePath[destBasePath.length - 1] || 'uc-activity';
 
     // have Yeoman greet the user
     console.log(this.yeoman);
@@ -25,10 +27,11 @@ var ActGenerator = yeoman.generators.Base.extend({
     // replace it with a short and sweet description of your generator
     console.log(chalk.magenta('You\'re using the fantastic Act generator.'));
 
+
     var prompts = [{
       name: 'actName',
       message: 'Would you like to call this activity?',
-      default: 'UC Activity'
+      default: defaultActName
     }, {
       type: 'confirm',
       name: 'neeUpload',
@@ -68,7 +71,7 @@ var ActGenerator = yeoman.generators.Base.extend({
   },
 
   bower: function () {
-    this.template('_bower.json', 'bower.json');
+    // this.template('_bower.json', 'bower.json');
     this.template('bowerrc', '.bowerrc');
   }
 });

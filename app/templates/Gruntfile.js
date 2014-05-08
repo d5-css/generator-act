@@ -52,7 +52,7 @@ module.exports = function(grunt) {
             },
             js: {
                 files: {
-                    'public/dist/app.min.js': [
+                    'public/dist/app-<%= pkg.version %>.js': [
                         'public/js/cmp/vue.js',
                         '<%= cmd.all.dest %>/seajs/sea.js',
                         '<%= cmd.all.dest %>/**/*.js'
@@ -68,10 +68,31 @@ module.exports = function(grunt) {
                     banner: '<%= meta.banner %>'
                 },
                 files: {
-                    'public/dist/style.min.css': [
+                    'public/dist/style-<%= pkg.version %>.css': [
                         'public/css/**/*.css'
                     ]
                 }
+            }
+        },
+        // 替换静态文件版本号
+        replace: {
+            // 发布
+            dist: {
+                options: {
+                    patterns: [{
+                        match: /\/app\-[v\d\.]+\.js/g,
+                        replacement: '/app-<%= pkg.version %>.js'
+                    }, {
+                        match: /\/style\-[v\d\.]+\.css/g,
+                        replacement: '/style-<%= pkg.version %>.css'
+                    }]
+                },
+                files: [{
+                    expand: true,
+                    flatten: true,
+                    src: ['*.html'],
+                    dest: ''
+                }]
             }
         },
         // 生成可发布的 html
@@ -96,6 +117,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-bower');
     grunt.loadNpmTasks('grunt-bower-install');
     grunt.loadNpmTasks('grunt-cmd');
+    grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-processhtml');
 
     // public tasks
