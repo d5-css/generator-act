@@ -127,6 +127,7 @@ module.exports = function(grunt) {
         'cmd',
         'uglify',
         'cssmin',
+        'replace',
         'processhtml',
         'clean:cmd'
     ]);
