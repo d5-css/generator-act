@@ -18,7 +18,7 @@ var ActGenerator = yeoman.generators.Base.extend({
 
   askFor: function () {
     var done = this.async(),
-      destBasePath = (this.src._destBase || '').split('/'),
+      destBasePath = (this.src._destBase || '').split(/[\/\\: ]/),
       defaultActName = destBasePath[destBasePath.length - 1] || 'uc-activity';
 
     // have Yeoman greet the user
