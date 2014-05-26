@@ -107,6 +107,35 @@ module.exports = function(grunt) {
         clean: {
             bower: ['bower_components'],
             cmd: ['<%= cmd.all.dest %>']
+        },
+        express: {
+            options: {
+                port: 4000
+            },
+            dev: {
+                options: {
+                    script: 'express/server.js'
+                }
+            }
+        },
+        watch: {
+            express: {
+                files: [
+                    'express/*.js'
+                ],
+                tasks: ['express:dev'],
+                options: {
+                    spawn: false
+                }
+            },
+            project: {
+                files: [
+                    '<%= cmd.all.src %>',
+                ],
+                options: {
+                    livereload: true
+                }
+            }
         }
     });
 
@@ -119,8 +148,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-cmd');
     grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-processhtml');
+    grunt.loadNpmTasks('grunt-express-server');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
-    // public tasks
+    // 打包任务
     grunt.registerTask('default', [
         'jshint',
         'bower',
@@ -130,5 +161,11 @@ module.exports = function(grunt) {
         'replace',
         'processhtml',
         'clean:cmd'
+    ]);
+
+    // 开发服务器任务
+    grunt.registerTask('dev', [
+        'express:dev',
+        'watch'
     ]);
 };

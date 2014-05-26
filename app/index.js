@@ -66,6 +66,10 @@ var ActGenerator = yeoman.generators.Base.extend({
     this.copy('public/css/base.css', 'public/css/base.css');
   },
 
+  express: function () {
+    this.directory('express', 'express');
+  },
+
   grunt: function () {
     this.copy('Gruntfile.js', 'Gruntfile.js');
   },
