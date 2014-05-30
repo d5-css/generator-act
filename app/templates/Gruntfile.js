@@ -154,7 +154,6 @@ module.exports = function(grunt) {
     // 打包任务
     grunt.registerTask('default', [
         'jshint',
-        'bower',
         'cmd',
         'uglify',
         'cssmin',

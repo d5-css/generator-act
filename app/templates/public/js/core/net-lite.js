@@ -5,9 +5,17 @@ define(function (require, exports) {
         entry = entryMatches ? entryMatches[1] : '';
 
     function ucParam(url) {
+        var urlHashArr = (url || '').split('#'),
+            hash = urlHashArr[1];
+        url = urlHashArr[0] || '';
         url += (url.indexOf('?') >= 0 ? '&' : '?') +
-            'entry=' + entry +
-            '&uc_param_str=dnfrpfbivesscpgimibtbmntnisieijblauputog';
+            'uc_param_str=dnfrpfbivesscpgimibtbmntnisieijblauputog';
+        if (entry) {
+            url += '&entry=' + entry;
+        }
+        if (hash) {
+            url += '#' + hash;
+        }
         return url;
     }
 
