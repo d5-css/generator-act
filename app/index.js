@@ -75,7 +75,7 @@ var ActGenerator = yeoman.generators.Base.extend({
   },
 
   bower: function () {
-    // this.template('_bower.json', 'bower.json');
+    this.template('_bower.json', 'bower.json');
     this.template('bowerrc', '.bowerrc');
   }
 });
