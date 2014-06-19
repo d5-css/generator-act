@@ -55,7 +55,7 @@ define(function (require, exports) {
         // Fragment shouldn't contain `&`, use `!!` instead
         // http://tools.ietf.org/html/rfc3986
         // @example #!/wallpaper?super=beauty!!sub=nude
-        var pairs = search.split(/!!|&/),
+        var pairs = search.split(/!!(?!!)/),
             state = {};
         for (var j = 0; j < pairs.length; j++) {
             var pair = pairs[j].replace(/\+/g, '%20'),
