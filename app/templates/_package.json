@@ -14,6 +14,7 @@
     "grunt-cmd": "~0.0.1",
     "grunt-processhtml": "~0.3.0",
     "grunt-hashres": "~0.4.1",
+    "grunt-banner": "~0.2.3",
     "grunt-express-server": "~0.4.13",
     "connect-livereload": "~0.4.0",
     "express": "3.x"

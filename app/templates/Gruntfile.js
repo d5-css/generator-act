@@ -7,7 +7,6 @@ module.exports = function (grunt) {
             banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> */'
         },
 
-
         // 代码检查
         jshint: {
             all: [
@@ -53,9 +52,6 @@ module.exports = function (grunt) {
         },
         // 压缩 js
         uglify: {
-            options: {
-                banner: '<%= meta.banner %>\n',
-            },
             js: {
                 files: {
                     'public/dist/app.js': [
@@ -70,8 +66,7 @@ module.exports = function (grunt) {
         cssmin: {
             add_banner: {
                 options: {
-                    keepSpecialComments: 0, // removing all
-                    banner: '<%= meta.banner %>'
+                    keepSpecialComments: 0 // removing all
                 },
                 files: {
                     'public/dist/style.css': [
@@ -103,10 +98,22 @@ module.exports = function (grunt) {
                 dest: 'index.html',
             }
         },
+        // 给 md5 的静态文件添加 banner
+        usebanner: {
+            md5: {
+                options: {
+                    banner: '<%= meta.banner %>',
+                },
+                files: {
+                    src: ['public/dist/*']
+                }
+            }
+        },
         // 清除 cmd 生成的文件
         clean: {
             bower: ['bower_components'],
-            cmd: ['<%= cmd.all.dest %>']
+            cmd: ['<%= cmd.all.dest %>'],
+            dist: ['public/dist']
         },
         // 开发服务器
         express: {
@@ -151,6 +158,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-cmd');
     grunt.loadNpmTasks('grunt-processhtml');
     grunt.loadNpmTasks('grunt-hashres');
+    grunt.loadNpmTasks('grunt-banner');
     grunt.loadNpmTasks('grunt-express-server');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
@@ -158,10 +166,12 @@ module.exports = function (grunt) {
     grunt.registerTask('default', [
         'jshint',
         'cmd',
+        'clean:dist',
         'uglify',
         'cssmin',
         'processhtml',
         'hashres',
+        'usebanner',
         'clean:cmd'
     ]);
 
