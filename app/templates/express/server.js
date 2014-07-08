@@ -13,8 +13,6 @@ app.use(require('connect-livereload')({
 // 根目录
 var basePath = process.cwd();
 
-
-
 app.get('/api/read', function (req, res) {
     setTimeout(function() {
         res.send({});
@@ -26,9 +24,10 @@ app.get('/api/read', function (req, res) {
 //     app.use(path, express.static(basePath + '/public' + path));
 // });
 
-// app.get('/', function (req, res) {
-//     res.sendfile('./index.html');
-// });
+// 首页为 index_dev.html
+app.get('/', function (req, res) {
+    res.sendfile('./index_dev.html');
+});
 
 app.use(express.static(basePath));
 

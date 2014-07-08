@@ -52,7 +52,7 @@ var ActGenerator = yeoman.generators.Base.extend({
 
   projectfiles: function () {
     this.copy('jshintrc', '.jshintrc');
-    this.template('_index.html', 'index.html');
+    this.template('_index.html', 'index_dev.html');
 
     this.mkdir('public');
     this.mkdir('public/js');
@@ -63,7 +63,8 @@ var ActGenerator = yeoman.generators.Base.extend({
     this.copy('public/js/core/page.js', 'public/js/core/page.js');
     this.copy('public/js/core/net' + (this.neeUpload ? '' : '-lite') + '.js', 'public/js/core/net.js');
     this.copy('public/js/page/index.js', 'public/js/page/index.js');
-    this.copy('public/css/base.css', 'public/css/base.css');
+
+    this.copy('public/css/base.css', 'public/css/' + this.actName + '.css');
   },
 
   express: function () {

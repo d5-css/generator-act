@@ -1,9 +1,14 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
+    'use strict';
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         meta: {
-            banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %> */'
+            banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> */'
         },
+
+
+        // 代码检查
         jshint: {
             all: [
                 'public/js/**/*.js'
@@ -16,20 +21,21 @@ module.exports = function(grunt) {
                 ],
             }
         },
-        // 将bower依赖的文件复制到项目中
+        // 将 bower 依赖的文件复制到项目中
         bower: {
             cmp: {
                 dest: 'public/js/cmp'
             }
         },
-        bowerInstall: {
-            target: {
-                src: [
-                    '*.html'
-                ],
-                exclude: ['cmp-*'],
-            }
+        // 将 <script src="vue"> 写到 index_dev.html 中
+        'sails-linker': {
+            vue: {
+                files: {
+                    'index_dev.html': ['public/js/cmp/vue*.js']
+                },
+            },
         },
+        // 转换 cmd 文件
         cmd: {
             options: {
                 base: 'public/js/',
@@ -52,7 +58,7 @@ module.exports = function(grunt) {
             },
             js: {
                 files: {
-                    'public/dist/app-<%= pkg.version %>.js': [
+                    'public/dist/app.js': [
                         'public/js/cmp/vue.js',
                         '<%= cmd.all.dest %>/seajs/sea.js',
                         '<%= cmd.all.dest %>/**/*.js'
@@ -68,39 +74,33 @@ module.exports = function(grunt) {
                     banner: '<%= meta.banner %>'
                 },
                 files: {
-                    'public/dist/style-<%= pkg.version %>.css': [
+                    'public/dist/style.css': [
                         'public/css/**/*.css'
                     ]
                 }
-            }
-        },
-        // 替换静态文件版本号
-        replace: {
-            // 发布
-            dist: {
-                options: {
-                    patterns: [{
-                        match: /\/app\-[v\d\.]+\.js/g,
-                        replacement: '/app-<%= pkg.version %>.js'
-                    }, {
-                        match: /\/style\-[v\d\.]+\.css/g,
-                        replacement: '/style-<%= pkg.version %>.css'
-                    }]
-                },
-                files: [{
-                    expand: true,
-                    flatten: true,
-                    src: ['*.html'],
-                    dest: ''
-                }]
             }
         },
         // 生成可发布的 html
         processhtml: {
             dist: {
                 files: {
-                    'index_release.html': ['index.html']
+                    'index.html': ['index_dev.html']
                 }
+            }
+        },
+        // 将静态文件按 md5 命名
+        hashres: {
+            options: {
+                encoding: 'utf8',
+                fileNameFormat: '${name}.${hash}.${ext}',
+                renameFiles: true
+            },
+            prod: {
+                src: [
+                    'public/dist/app.js',
+                    'public/dist/style.css'
+                ],
+                dest: 'index.html',
             }
         },
         // 清除 cmd 生成的文件
@@ -108,6 +108,7 @@ module.exports = function(grunt) {
             bower: ['bower_components'],
             cmd: ['<%= cmd.all.dest %>']
         },
+        // 开发服务器
         express: {
             options: {
                 port: 4000
@@ -118,6 +119,7 @@ module.exports = function(grunt) {
                 }
             }
         },
+        // 监听
         watch: {
             express: {
                 files: [
@@ -130,7 +132,8 @@ module.exports = function(grunt) {
             },
             project: {
                 files: [
-                    '<%= cmd.all.src %>',
+                    'public/**/*',
+                    '*.html'
                 ],
                 options: {
                     livereload: true
@@ -144,10 +147,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-bower');
-    grunt.loadNpmTasks('grunt-bower-install');
+    grunt.loadNpmTasks('grunt-sails-linker');
     grunt.loadNpmTasks('grunt-cmd');
-    grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-processhtml');
+    grunt.loadNpmTasks('grunt-hashres');
     grunt.loadNpmTasks('grunt-express-server');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
@@ -157,8 +160,8 @@ module.exports = function(grunt) {
         'cmd',
         'uglify',
         'cssmin',
-        'replace',
         'processhtml',
+        'hashres',
         'clean:cmd'
     ]);
 

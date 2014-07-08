@@ -12,7 +12,7 @@ var CmpGenerator = yeoman.generators.NamedBase.extend({
     if (this.name) {
       var prompts = [{
         name: 'ver',
-        message: 'What version would you take for cmp-' + this.name + '?',
+        message: 'What version would you take for ' + this.name + '?',
         default: '*'
       }];
       this.prompt(prompts, function (props) {
@@ -38,10 +38,10 @@ var CmpGenerator = yeoman.generators.NamedBase.extend({
       bower.commands
         .install([cmpName])
         .on('end', function (installed) {
-          // bowerInstall: Vue 不是 seajs 模块，需要直接插入到页面中
           // bower: 将 bower 下载的代码复制到项目中去
+          // sails-linker: Vue 不是 seajs 模块，需要直接插入到页面中
           // clean:bower: 清空 bower 文件
-          that.spawnCommand('grunt', ['bowerInstall', 'bower', 'clean:bower']);
+          that.spawnCommand('grunt', ['bower', 'sails-linker:' + cmpName, 'clean:bower']);
         });
     } else {
       cmpName = 'git@git.ucweb.local:pf/cmp-' + this.name + '.git#' + this.ver;
