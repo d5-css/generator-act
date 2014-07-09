@@ -32,16 +32,10 @@ var ActGenerator = yeoman.generators.Base.extend({
       name: 'actName',
       message: 'Would you like to call this activity?',
       default: defaultActName
-    }, {
-      type: 'confirm',
-      name: 'neeUpload',
-      message: 'Would you like to upload files in your project?',
-      default: false
     }];
 
     this.prompt(prompts, function (props) {
       this.actName = props.actName;
-      this.neeUpload = props.neeUpload;
       done();
     }.bind(this));
   },
@@ -60,8 +54,6 @@ var ActGenerator = yeoman.generators.Base.extend({
     this.mkdir('public/images');
     this.copy('public/js/seajs/sea.js', 'public/js/seajs/sea.js');
     this.copy('public/js/core/page.js', 'public/js/core/page.js');
-    this.copy('public/js/core/page.js', 'public/js/core/page.js');
-    this.copy('public/js/core/net' + (this.neeUpload ? '' : '-lite') + '.js', 'public/js/core/net.js');
     this.copy('public/js/page/index.js', 'public/js/page/index.js');
 
     this.copy('public/css/base.css', 'public/css/' + this.actName + '.css');
