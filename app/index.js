@@ -53,8 +53,6 @@ var ActGenerator = yeoman.generators.Base.extend({
     this.mkdir('public/css');
     this.mkdir('public/images');
     this.copy('public/js/seajs/sea.js', 'public/js/seajs/sea.js');
-    this.copy('public/js/core/page.js', 'public/js/core/page.js');
-    this.copy('public/js/page/index.js', 'public/js/page/index.js');
 
     this.copy('public/css/base.css', 'public/css/' + this.actName + '.css');
   },
