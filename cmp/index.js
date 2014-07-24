@@ -50,8 +50,12 @@ var CmpGenerator = yeoman.generators.NamedBase.extend({
       bower.commands
         .install([cmpName])
         .on('end', function (installed) {
-          var pkgMeta = installed[that.name].pkgMeta;
-          console.log(pkgMeta.name + ' (' + pkgMeta.version + ') installed!');
+          var pkgMeta = ((installed || '')[that.name] || '').pkgMeta;
+          if (pkgMeta) {
+            console.log(pkgMeta.name + '(v' + pkgMeta.version + ') installed!');
+          } else {
+            console.log(that.name + ' installed!');
+          }
           // bower: 将 bower 下载的代码复制到项目中去
           // clean:bower: 清空 bower 文件
           that.spawnCommand('grunt', ['bower', 'clean:bower']);
