@@ -3,11 +3,20 @@
 var express = require('express'),
     app = express();
 
-// var data = require('./data');
+// 自动注入 livereload 和 weinre
+var livereloadPort = 35729,
+    weinreId = '<%= actName %>',
+    genScript = function (src) {
+        return src ? '<script src="' + src +'"><\\/script>' : '';
+    },
+    // snippet = '';
+    snippet = '\n<script>//<![CDATA[\ndocument.write(\'' +
+        genScript('//\' + (location.hostname || \'localhost\') + \':' + livereloadPort + '/livereload.js') +
+        (weinreId ? genScript('//weinre.dev.uae.uc.cn/target/target-script-min.js#' + weinreId) : '') +
+        '\')\n//]]></script>\n';
 
-// 自动注入 livereload
-app.use(require('connect-livereload')({
-    port: 35729
+app.use(require('connect-inject')({
+    snippet: snippet
 }));
 
 // 根目录

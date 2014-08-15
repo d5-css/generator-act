@@ -35,7 +35,7 @@ var ActGenerator = yeoman.generators.Base.extend({
     }];
 
     this.prompt(prompts, function (props) {
-      this.actName = props.actName;
+      this.actName = props.actName.toLowerCase() === 'y' ? defaultActName : props.actName;
       done();
     }.bind(this));
   },
@@ -58,7 +58,8 @@ var ActGenerator = yeoman.generators.Base.extend({
   },
 
   express: function () {
-    this.directory('express', 'express');
+    this.mkdir('express');
+    this.template('express/_server.js', 'express/server.js');
   },
 
   grunt: function () {
@@ -67,7 +68,7 @@ var ActGenerator = yeoman.generators.Base.extend({
 
   bower: function () {
     this.template('_bower.json', 'bower.json');
-    this.template('bowerrc', '.bowerrc');
+    this.copy('bowerrc', '.bowerrc');
   }
 });
 
