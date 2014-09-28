@@ -46,7 +46,7 @@ var CmpGenerator = yeoman.generators.NamedBase.extend({
         });
     } else {
       // gitlab 下载
-      cmpName = 'git@git.ucweb.local:pf/cmp-' + this.name + '.git#' + this.ver;
+      cmpName = 'git@git.ucweb.local:pffe/' + this.name + '.git#' + this.ver;
       bower.commands
         .install([cmpName])
         .on('end', function (installed) {
