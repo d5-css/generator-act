@@ -5,5 +5,13 @@
             "type": "int",
             "name": "var1"
         }]
-    }]
+    }],
+    "languages": {
+        "files": [
+            "index"
+        ],
+        "lang": [
+            // "br", "id", "in", "ru", "vn"
+        ]
+    }
 }

@@ -157,10 +157,15 @@ module.exports = function(grunt) {
             'hashres',
             'usebanner',
             'clean:cmd'
-        ];
+        ],
+        clientConfig = grunt.file.readJSON('public/config/grunt.json'),
+        DEV_HTML_PATH = 'public/views/';
 
-    // 前端开发模版转换为play模版
+    // 前端开发模版转换为play模版任务
     htmlRelease();
+
+    // 翻译任务任务
+    translate();
 
     grunt.initConfig(initConfig);
 
@@ -187,10 +192,10 @@ module.exports = function(grunt) {
         'watch'
     ]);
 
-    // 前端开发模版转换为play模版
+    // 前端开发模版转换为play模版任务
     function htmlRelease() {
 
-        var htmlConfig = grunt.file.readJSON('public/config/grunt.json').replaceRelease,
+        var htmlConfig = clientConfig.replaceRelease,
             i, j;
 
         for (i = 0; i < htmlConfig.length; ++i) {
@@ -204,7 +209,7 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     flatten: true,
-                    src: 'public/views/' + config.html + '.html',
+                    src: DEV_HTML_PATH + config.html + '_dev.html',
                     dest: 'app/japidviews/FrontendController/'
                 }]
             };
@@ -226,12 +231,54 @@ module.exports = function(grunt) {
                 }
                 argsReplacement = argsReplacement.substring(0, argsReplacement.length - 1);
                 argsReplacement += '\n<!DOCTYPE HTML>';
+                initConfig.replace[config.html].options.patterns.push({
+                    match: /<!DOCTYPE HTML>/gi,
+                    replacement: argsReplacement
+                });
             }
-            initConfig.replace[config.html].options.patterns.push({
-                match: /<!DOCTYPE HTML>/gi,
-                replacement: argsReplacement
-            });
             defaultTask.unshift('replace:' + config.html);
+        }
+    }
+
+
+    // 翻译任务任务
+    function translate() {
+        var i, j, LANGUAGES = clientConfig.languages.lang,
+            FILES = clientConfig.languages.files,
+            lang, conf, watchFiles = [],
+            watchTasks = [];
+        for (i = 0; i < LANGUAGES.length; i++) {
+            lang = LANGUAGES[i];
+            conf = {
+                options: {
+                    patterns: [{
+                        json: grunt.file.readJSON('languages/' + lang + '.json')
+                    }]
+                },
+                files: []
+            };
+            for (j = 0; j < FILES.length; j++) {
+                conf.files.push({
+                    src: DEV_HTML_PATH + FILES[j] + '_dev.html',
+                    dest: DEV_HTML_PATH + FILES[j] + '_' + lang + '_dev.html'
+                });
+            }
+            initConfig.replace[lang] = conf;
+            defaultTask.unshift('replace:' + lang);
+            watchTasks.push('replace:' + lang);
+        }
+        if (LANGUAGES && LANGUAGES.length > 0) {
+            for (i = 0; i < FILES.length; i++) {
+                watchFiles.push(DEV_HTML_PATH + FILES[i] + '_dev.html');
+            }
+            initConfig.watch.translate = {
+                files: watchFiles,
+                tasks: watchTasks,
+                options: {
+                    livereload: true
+                }
+            };
+            initConfig.watch.translate.files.push('languages/*');
         }
     }
 };
