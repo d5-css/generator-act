@@ -1,0 +1,16 @@
+{
+    "replaceRelease": [{
+        "html": "index_dev",
+        "args": [{
+            "type": "int",
+            "name": "var1"
+        }]
+    }],
+    "languages": {
+        "files": [
+            "index"
+        ],
+        "lang": [
+        ]
+    }
+}
