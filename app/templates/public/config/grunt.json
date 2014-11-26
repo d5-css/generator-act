@@ -1,6 +1,6 @@
 {
     "replaceRelease": [{
-        "html": "index_dev",
+        "html": "index",
         "args": [{
             "type": "int",
             "name": "var1"
