@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     'use strict';
 
     var initConfig = {
@@ -69,7 +69,7 @@ module.exports = function(grunt) {
                     },
                     files: {
                         'public/dist/style.css': [
-                            'public/css/**/*.css'
+                            'public/css/*.css'
                         ]
                     }
                 }
@@ -77,9 +77,7 @@ module.exports = function(grunt) {
             // 生成可发布的 html
             processhtml: {
                 dist: {
-                    files: {
-                        'app/japidviews/FrontendController/index.html': ['app/japidviews/FrontendController/index_dev.html']
-                    }
+                    files: {}
                 }
             },
             // 将静态文件按 md5 命名
@@ -94,7 +92,7 @@ module.exports = function(grunt) {
                         'public/dist/app.js',
                         'public/dist/style.css'
                     ],
-                    dest: 'app/japidviews/FrontendController/index.html',
+                    dest: [],
                 }
             },
             // 给 md5 的静态文件添加 banner
@@ -145,6 +143,21 @@ module.exports = function(grunt) {
                     }
                 }
             },
+            imagemin: { // Task
+                static: { // Target
+                    options: { // Target options
+                        optimizationLevel: 3
+                    }
+                },
+                dynamic: { // Another target
+                    files: [{
+                        expand: true, // Enable dynamic expansion
+                        cwd: 'public/images/', // Src matches are relative to this path
+                        src: ['*.{png,jpg,gif}'], // Actual patterns to match
+                        dest: 'public/images/' // Destination path prefix
+                    }]
+                }
+            },
             replace: {}
         },
         defaultTask = [
@@ -153,19 +166,24 @@ module.exports = function(grunt) {
             'clean:dist',
             'uglify',
             'cssmin',
-            'processhtml',
-            'hashres',
-            'usebanner',
-            'clean:cmd'
+            'processhtml'
         ],
         clientConfig = grunt.file.readJSON('public/config/grunt.json'),
-        DEV_HTML_PATH = 'public/views/';
+        DEV_HTML_PATH = 'public/views/',
+        PLAY_VIEWS_PATH = 'app/japidviews/FrontendController/';
+
+    // 翻译任务任务
+    translate();
 
     // 前端开发模版转换为play模版任务
     htmlRelease();
 
-    // 翻译任务任务
-    translate();
+    defaultTask = defaultTask.concat([
+        'hashres',
+        'usebanner',
+        'clean:cmd',
+        'imagemin:dynamic'
+    ]);
 
     grunt.initConfig(initConfig);
 
@@ -182,9 +200,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-banner');
     grunt.loadNpmTasks('grunt-express-server');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-imagemin');
 
-    // 打包任务
+    // 发布任务
     grunt.registerTask('default', defaultTask);
+    // grunt.registerTask('release', defaultTask);
 
     // 开发服务器任务
     grunt.registerTask('dev', [
@@ -192,59 +212,100 @@ module.exports = function(grunt) {
         'watch'
     ]);
 
-    // 前端开发模版转换为play模版任务
+    // 添加模版转换任务
     function htmlRelease() {
 
-        var htmlConfig = clientConfig.replaceRelease,
-            i, j;
-
+        var htmlConfig = clientConfig.views,
+            i;
         for (i = 0; i < htmlConfig.length; ++i) {
-            var argsReplacement = '',
-                config = htmlConfig[i];
-
-            initConfig.replace[config.html] = {
+            var argsStr = '',
+                config = htmlConfig[i],
+                prePatterns = [{
+                    match: /`/g,
+                    replacement: ''
+                }, {
+                    match: /@/g,
+                    replacement: '~@'
+                }, {
+                    match: /\$/g,
+                    replacement: '~$'
+                }, {
+                    match: /~/g,
+                    replacement: '~~'
+                }],
+                patterns;
+            // 模版发布任务
+            initConfig.processhtml.dist.files[PLAY_VIEWS_PATH + htmlConfig[i].html + '.html'] = [DEV_HTML_PATH + htmlConfig[i].html + '_dev.html'];
+            // hash任务
+            initConfig.hashres.prod.dest.push(PLAY_VIEWS_PATH + htmlConfig[i].html + '.html');
+            initConfig.replace['pre_' + config.html] = {
                 options: {
-                    patterns: []
+                    patterns: prePatterns
                 },
                 files: [{
                     expand: true,
                     flatten: true,
-                    src: DEV_HTML_PATH + config.html + '_dev.html',
-                    dest: 'app/japidviews/FrontendController/'
+                    src: PLAY_VIEWS_PATH + config.html + '.html',
+                    dest: PLAY_VIEWS_PATH
                 }]
             };
+            defaultTask.push('replace:pre_' + config.html);
             if (config.args && config.args.length !== 0) {
-                argsReplacement += '`args ';
-                for (j = 0; j < config.args.length; ++j) {
-                    var replacement = '';
-                    argsReplacement += config.args[j].type + ' ';
-                    argsReplacement += config.args[j].name + ',';
-                    if (config.args[j].type === 'String') {
-                        replacement = config.args[j].name + ': \'${' + config.args[j].name + '}\',';
-                    } else {
-                        replacement = config.args[j].name + ': ${' + config.args[j].name + '},';
-                    }
-                    initConfig.replace[config.html].options.patterns.push({
-                        match: new RegExp('/\\*\\s*render ' + config.args[j].name + '\\s*\\*/\\s*.*', 'gi'),
-                        replacement: replacement
-                    });
-                }
-                argsReplacement = argsReplacement.substring(0, argsReplacement.length - 1);
-                argsReplacement += '\n<!DOCTYPE HTML>';
-                initConfig.replace[config.html].options.patterns.push({
+                argsStr = __getArgsStr(config.args);
+                patterns = __getArgsPatterns(config.args);
+                patterns.push({
                     match: /<!DOCTYPE HTML>/gi,
-                    replacement: argsReplacement
+                    replacement: argsStr
                 });
+                initConfig.replace[config.html] = {
+                    options: {
+                        patterns: patterns
+                    },
+                    files: [{
+                        expand: true,
+                        flatten: true,
+                        src: PLAY_VIEWS_PATH + config.html + '.html',
+                        dest: PLAY_VIEWS_PATH
+                    }]
+                };
+                defaultTask.push('replace:' + config.html);
             }
-            defaultTask.unshift('replace:' + config.html);
         }
     }
 
+    function __getArgsStr(args) {
+        var i, argsStr = '`args ';
+        for (i = 0; i < args.length; ++i) {
+            argsStr += args[i].type + ' ';
+            argsStr += args[i].name + ',';
+        }
+        argsStr = argsStr.substring(0, argsStr.length - 1);
+        argsStr += '\n<!DOCTYPE HTML>';
+        return argsStr;
+    }
+
+    function __getArgsPatterns(args) {
+        var i, patterns = [];
+        for (i = 0; i < args.length; ++i) {
+            var replacement = '';
+            if (args[i].type === 'String') {
+                replacement = args[i].name + ': \'${' + args[i].name + '}\',';
+            } else {
+                replacement = args[i].name + ': ${' + args[i].name + '},';
+            }
+            patterns.push({
+                match: new RegExp('/\\*\\s*render ' + args[i].name + '\\s*\\*/\\s*.*', 'gi'),
+                replacement: replacement
+            });
+        }
+        return patterns;
+    }
 
     // 翻译任务任务
     function translate() {
         var i, j, LANGUAGES = clientConfig.languages.lang,
             FILES = clientConfig.languages.files,
+            U2_FILES = clientConfig.languages.u2Files,
             lang, conf, watchFiles = [],
             watchTasks = [];
         for (i = 0; i < LANGUAGES.length; i++) {
@@ -261,6 +322,12 @@ module.exports = function(grunt) {
                 conf.files.push({
                     src: DEV_HTML_PATH + FILES[j] + '_dev.html',
                     dest: DEV_HTML_PATH + FILES[j] + '_' + lang + '_dev.html'
+                });
+            }
+            for (j = 0; j < U2_FILES.length; j++) {
+                conf.files.push({
+                    src: PLAY_VIEWS_PATH + U2_FILES[j] + '_dev.html',
+                    dest: PLAY_VIEWS_PATH + U2_FILES[j] + '_' + lang + '.html'
                 });
             }
             initConfig.replace[lang] = conf;
