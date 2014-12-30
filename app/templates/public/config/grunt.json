@@ -1,16 +1,14 @@
 {
-    "replaceRelease": [{
-        "html": "index_dev",
+    "views": [{
+        "html": "index",
         "args": [{
             "type": "int",
-            "name": "var1"
+            "name": "test"
         }]
     }],
     "languages": {
-        "files": [
-            "index"
-        ],
-        "lang": [
-        ]
+        "files": [],
+        "u2Files": [],
+        "lang": []
     }
 }
