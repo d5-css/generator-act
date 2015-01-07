@@ -8,6 +8,7 @@
     <title>
         <%= actName %>
     </title>
+    <link rel="shortcut icon" href="http://www.ucweb.com/favicon.ico">
     <!-- build:css public/dist/style.css -->
     <link rel="stylesheet" href="public/css/<%= actName %>.css">
     <!-- /build -->
@@ -24,12 +25,17 @@
     <script src="public/js/seajs/sea.js"></script>
     <!-- /build -->
     <script type="text/javascript">
-    define('appConfig', function(require, exports) {
+    define('appData', function(require, exports) {
         'use strict';
-        exports.DATA = {
+        /*后端渲染入口*/
+        exports.RENDER = {
             /* render test */
             test: 123
         };
+        /*程序配置对象*/
+        exports.CONF = {};
+        /*文案配置对象*/
+        exports.MSG = {};
     });
     </script>
 </body>
