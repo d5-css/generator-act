@@ -25,14 +25,6 @@ module.exports = function (grunt) {
                     dest: 'public/js/cmp'
                 }
             },
-            // 将 <script src="vue"> 写到 index_dev.html 中
-            'sails-linker': {
-                vue: {
-                    files: {
-                        'index_dev.html': ['public/js/cmp/vue*.js']
-                    },
-                },
-            },
             // 转换 cmd 文件
             cmd: {
                 options: {
@@ -143,18 +135,16 @@ module.exports = function (grunt) {
                     }
                 }
             },
-            imagemin: { // Task
-                static: { // Target
-                    options: { // Target options
+            imagemin: {
+                dist: {
+                    options: {
                         optimizationLevel: 3
-                    }
-                },
-                dynamic: { // Another target
+                    },
                     files: [{
-                        expand: true, // Enable dynamic expansion
-                        cwd: 'public/images/', // Src matches are relative to this path
-                        src: ['*.{png,jpg,gif}'], // Actual patterns to match
-                        dest: 'public/images/' // Destination path prefix
+                        expand: true,
+                        cwd: 'public/images/',
+                        src: ['*.{png,jpg,gif}'],
+                        dest: 'public/images/'
                     }]
                 }
             },
@@ -182,7 +172,7 @@ module.exports = function (grunt) {
         'hashres',
         'usebanner',
         'clean:cmd',
-        'imagemin:dynamic'
+        'imagemin:dist'
     ]);
 
     grunt.initConfig(initConfig);
@@ -192,7 +182,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-bower');
-    grunt.loadNpmTasks('grunt-sails-linker');
     grunt.loadNpmTasks('grunt-cmd');
     grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-processhtml');
@@ -235,7 +224,7 @@ module.exports = function (grunt) {
                 }],
                 patterns;
             // 模版发布任务
-            initConfig.processhtml.dist.files[PLAY_VIEWS_PATH + htmlConfig[i].html + '.html'] = [DEV_HTML_PATH + htmlConfig[i].html + '_dev.html'];
+            initConfig.processhtml.dist.files[PLAY_VIEWS_PATH + htmlConfig[i].html + '.html'] = [DEV_HTML_PATH + htmlConfig[i].html + '.html'];
             // hash任务
             initConfig.hashres.prod.dest.push(PLAY_VIEWS_PATH + htmlConfig[i].html + '.html');
             initConfig.replace['pre_' + config.html] = {
@@ -320,13 +309,13 @@ module.exports = function (grunt) {
             };
             for (j = 0; j < FILES.length; j++) {
                 conf.files.push({
-                    src: DEV_HTML_PATH + FILES[j] + '_dev.html',
-                    dest: DEV_HTML_PATH + FILES[j] + '_' + lang + '_dev.html'
+                    src: DEV_HTML_PATH + FILES[j] + '.html',
+                    dest: DEV_HTML_PATH + FILES[j] + '_' + lang + '.html'
                 });
             }
             for (j = 0; j < U2_FILES.length; j++) {
                 conf.files.push({
-                    src: PLAY_VIEWS_PATH + U2_FILES[j] + '_dev.html',
+                    src: PLAY_VIEWS_PATH + U2_FILES[j] + '.html',
                     dest: PLAY_VIEWS_PATH + U2_FILES[j] + '_' + lang + '.html'
                 });
             }
@@ -336,7 +325,7 @@ module.exports = function (grunt) {
         }
         if (LANGUAGES && LANGUAGES.length > 0) {
             for (i = 0; i < FILES.length; i++) {
-                watchFiles.push(DEV_HTML_PATH + FILES[i] + '_dev.html');
+                watchFiles.push(DEV_HTML_PATH + FILES[i] + '.html');
             }
             initConfig.watch.translate = {
                 files: watchFiles,

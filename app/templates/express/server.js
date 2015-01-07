@@ -29,9 +29,9 @@ if (config.LIVERELOAD || config.WEINRE) {
         snippet: snippet
     }));
 }
-// 首页为 index_dev.html
+// 首页为 index.html
 app.get(PATH + '/index', function(req, res) {
-    res.sendfile('public/views/index_dev.html');
+    res.sendfile('public/views/index.html');
 });
 
 // 和后端的路径保持一致
