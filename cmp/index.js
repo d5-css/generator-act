@@ -47,7 +47,7 @@ var CmpGenerator = yeoman.generators.NamedBase.extend({
 
         // page 组件：自动添加 script
         if (this.name === 'page') {
-            var indexFilePath = 'public/views/index_dev.html',
+            var indexFilePath = 'public/views/index.html',
                 fileStr = this.readFileAsString(indexFilePath);
             if (fileStr.indexOf('cmp/page') < 0) {
                 this.appendToFile(
