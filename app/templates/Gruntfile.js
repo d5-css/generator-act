@@ -46,8 +46,8 @@ module.exports = function (grunt) {
                 js: {
                     files: {
                         'public/dist/app.js': [
-                            'public/js/cmp/vue.js',
                             '<%= cmd.all.dest %>/seajs/sea.js',
+                            'public/js/cmp/vue.js',
                             '<%= cmd.all.dest %>/**/*.js'
                         ]
                     }
