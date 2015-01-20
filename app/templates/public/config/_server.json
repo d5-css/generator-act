@@ -1,8 +1,8 @@
 {
-    "PATH": "/act",
+    "PATH": "/<%= actName %>",
     "PORT": 9000,
     "LIVERELOAD": true,
     "LIVERELOAD_PORT": 35729,
     "WEINRE": true,
-    "WEINRE_ID": ""
+    "WEINRE_ID": "<%= actName %>"
 }

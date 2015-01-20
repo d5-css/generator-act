@@ -54,7 +54,7 @@ var ActGenerator = yeoman.generators.Base.extend({
         this.mkdir('public/images');
         this.mkdir('public/config');
         this.copy('public/config/grunt.json', 'public/config/grunt.json');
-        this.copy('public/config/server.json', 'public/config/server.json');
+        this.template('public/config/_server.json', 'public/config/server.json');
         this.mkdir('public/views');
         this.template('public/views/_index.html', 'public/views/index.html');
     },

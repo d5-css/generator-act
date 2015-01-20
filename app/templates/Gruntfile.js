@@ -36,7 +36,6 @@ module.exports = function (grunt) {
                         'public/js/**/*.js'
                     ],
                     ignores: [
-                        'public/js/cmp/vue.js',
                     ],
                     dest: 'public/compiled'
                 }
@@ -47,7 +46,6 @@ module.exports = function (grunt) {
                     files: {
                         'public/dist/app.js': [
                             '<%= cmd.all.dest %>/seajs/sea.js',
-                            'public/js/cmp/vue.js',
                             '<%= cmd.all.dest %>/**/*.js'
                         ]
                     }

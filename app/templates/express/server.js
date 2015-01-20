@@ -1,42 +1,46 @@
 'use strict';
 
-var express = require('express'),
-    app = express(),
-    fs = require('fs'),
-    config = JSON.parse(fs.readFileSync('public/config/server.json', {
-        encoding: 'utf8'
-    })),
-    PATH = config.PATH,
-    livereloadPort = config.LIVERELOAD_PORT || 35729,
-    weinreId = config.WEINRE_ID || 'uc_activity',
-    basePath = process.cwd(), // 根目录
-    port = config.PORT || 9000,
-    genScript = function(src) {
-        return src ? '<script src="' + src + '"><\\/script>' : '';
-    },
-    snippet = '';
+var express = require('express');
 
-if (config.LIVERELOAD || config.WEINRE) {
+var CONFIG = require('../public/config/server.json');
+var PATH = CONFIG.PATH;
+var LIVERELOAD_PORT = CONFIG.LIVERELOAD_PORT || 35729;
+var WEINRE_ID = CONFIG.WEINRE_ID || 'uc_activity';
+var PORT = CONFIG.PORT || 9000;
+
+function genScript(src) {
+    return src ? '<script src="' + src + '"><\\/script>' : '';
+}
+
+var app = express();
+
+// 插入 LIVERELOAD 和 WEINRE
+var snippet = '';
+if (CONFIG.LIVERELOAD || CONFIG.WEINRE) {
     snippet = '\n<script>//<![CDATA[\ndocument.write(\'';
-    if (config.LIVERELOAD) {
-        snippet += genScript('//\' + (location.hostname || \'localhost\') + \':' + livereloadPort + '/livereload.js');
+    if (CONFIG.LIVERELOAD) {
+        snippet += genScript('//\' + (location.hostname || \'localhost\') + \':' + LIVERELOAD_PORT + '/livereload.js');
     }
-    if (config.WEINRE) {
-        snippet += (weinreId ? genScript('//weinre.uae.ucweb.local/target/target-script-min.js#' + weinreId) : '');
+    if (CONFIG.WEINRE && WEINRE_ID) {
+        snippet += genScript('//weinre.uae.ucweb.local/target/target-script-min.js#' + WEINRE_ID);
     }
     snippet += '\')\n//]]></script>\n';
     app.use(require('connect-inject')({
         snippet: snippet
     }));
 }
+
 // 首页为 index.html
-app.get(PATH + '/index', function(req, res) {
+function indexHandler(req, res) {
     res.sendfile('public/views/index.html');
-});
+}
+app.get(PATH + '/', indexHandler);
+app.get(PATH + '/index', indexHandler);
 
 // 和后端的路径保持一致
-app.use(PATH, express.static(basePath));
+app.use(PATH, express.static(process.cwd()));
 
-app.listen(port, function() {
-    console.log('Server listening on port ' + port);
+// 启动
+app.listen(PORT, function() {
+    console.log('Server listening on port ' + PORT);
 });
