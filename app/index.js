@@ -1,5 +1,5 @@
 'use strict';
-var util = require('util');
+// var util = require('util');
 var path = require('path');
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
@@ -52,19 +52,20 @@ var ActGenerator = yeoman.generators.Base.extend({
         this.mkdir('public/css');
         this.copy('public/css/base.css', 'public/css/' + this.actName + '.css');
         this.mkdir('public/images');
-        this.mkdir('public/config');
-        this.copy('public/config/grunt.json', 'public/config/grunt.json');
-        this.template('public/config/_server.json', 'public/config/server.json');
         this.mkdir('public/views');
         this.template('public/views/_index.html', 'public/views/index.html');
+        this.mkdir('public/config');
     },
 
     express: function() {
+        this.copy('public/config/mock.js', 'public/config/mock.js');
+        this.template('public/config/_server.json', 'public/config/server.json');
         this.mkdir('express');
         this.copy('express/server.js', 'express/server.js');
     },
 
     grunt: function() {
+        this.copy('public/config/grunt.json', 'public/config/grunt.json');
         this.copy('Gruntfile.js', 'Gruntfile.js');
     },
 

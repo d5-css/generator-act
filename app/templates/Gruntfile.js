@@ -117,7 +117,9 @@ module.exports = function (grunt) {
             watch: {
                 express: {
                     files: [
-                        'express/*.js'
+                        'express/*.js',
+                        'public/config/server.json',
+                        'public/config/mock.js'
                     ],
                     tasks: ['express:dev'],
                     options: {

@@ -1,6 +1,7 @@
 'use strict';
 
 var express = require('express');
+var Mock = require('mockjs');
 
 var CONFIG = require('../public/config/server.json');
 var PATH = CONFIG.PATH;
@@ -39,6 +40,24 @@ app.get(PATH + '/index', indexHandler);
 
 // 和后端的路径保持一致
 app.use(PATH, express.static(process.cwd()));
+
+// Mock 数据模拟
+var MOCKS = require('../public/config/mock');
+if (MOCKS && MOCKS.length) {
+    // 遍历 mock 数组
+    MOCKS.forEach(function (mockConf) {
+        if (mockConf.path) {
+            mockConf.method = mockConf.method || 'get';
+            // 接入 express
+            app[mockConf.method](PATH + mockConf.path, function (req, res) {
+                // 延迟输出
+                setTimeout(function() {
+                    res.send(Mock.mock(mockConf.data));
+                }, mockConf.delay || 0);
+            });
+        }
+    });
+}
 
 // 启动
 app.listen(PORT, function() {
