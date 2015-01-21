@@ -28,6 +28,14 @@ $ yo act:cmp <cmp-name>
 
 其中 `cmp-name` 为组件名
 
+### 添加语言包
+
+```
+$ yo act:lang <language>
+```
+
+其中 `language` 为语言名称，如 `en`，`ru` 等
+
 ## License
 
 MIT

@@ -1,13 +1,19 @@
 {
-    "views": [{
-        "html": "index",
-        "args": [{
-            "type": "int",
-            "name": "test"
-        }]
-    }],
+    "views": [
+        {
+            "html": "index",
+            "args": [
+                {
+                    "type": "int",
+                    "name": "test"
+                }
+            ]
+        }
+    ],
     "languages": {
-        "files": [],
+        "files": [
+            "index"
+        ],
         "u2Files": [],
         "lang": []
     }

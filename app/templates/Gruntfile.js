@@ -162,6 +162,9 @@ module.exports = function (grunt) {
         DEV_HTML_PATH = 'public/views/',
         PLAY_VIEWS_PATH = 'app/japidviews/FrontendController/';
 
+    // 初始化 clientConfig
+    initClientConfig();
+
     // 翻译任务任务
     translate();
 
@@ -201,12 +204,44 @@ module.exports = function (grunt) {
         'watch'
     ]);
 
+    /**
+     * 初始化 clientConfig
+     * 将多语言 clientConfig.languages 写到 clientConfig.views
+     */
+    function initClientConfig() {
+        var langViews = [];
+        if (clientConfig.languages && clientConfig.languages.files) {
+            clientConfig.languages.files.forEach(function (file) {
+                var view;
+                clientConfig.views.some(function (v) {
+                    if (v.html === file) {
+                        view = v;
+                        return true;
+                    }
+                    return false;
+                });
+                if (view) {
+                    clientConfig.languages.lang.forEach(function (lang) {
+                        var v = Object.create(view);
+                        v.html += '_' + lang;
+                        langViews.push(v);
+                    });
+                    view.html = '';
+                }
+            });
+            clientConfig.views = clientConfig.views.concat(langViews);
+        }
+    }
+
     // 添加模版转换任务
     function htmlRelease() {
 
         var htmlConfig = clientConfig.views,
             i;
         for (i = 0; i < htmlConfig.length; ++i) {
+            if (!htmlConfig[i].html) {
+                continue;
+            }
             var argsStr = '',
                 config = htmlConfig[i],
                 prePatterns = [{
