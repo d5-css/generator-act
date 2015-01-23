@@ -1,4 +1,14 @@
 {
+    "path": "/<%= actName %>",
+    "port": 9000,
+    "livereload": {
+        "enable": true,
+        "port": 35729
+    },
+    "weinre": {
+        "enable": true,
+        "id": "<%= actName %>"
+    },
     "views": [
         {
             "html": "index",

@@ -1,7 +1,8 @@
 module.exports = function (grunt) {
     'use strict';
 
-    var initConfig = {
+    var devConfig = grunt.file.readJSON('conf/dev.json'),
+        initConfig = {
             pkg: grunt.file.readJSON('package.json'),
             meta: {
                 banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> */'
@@ -105,11 +106,11 @@ module.exports = function (grunt) {
             // 开发服务器
             express: {
                 options: {
-                    port: 9000
+                    port: devConfig.port
                 },
                 dev: {
                     options: {
-                        script: 'express/server.js'
+                        script: 'server/express.js'
                     }
                 }
             },
@@ -117,9 +118,8 @@ module.exports = function (grunt) {
             watch: {
                 express: {
                     files: [
-                        'express/*.js',
-                        'public/config/server.json',
-                        'public/config/mock.js'
+                        'server/*.js',
+                        'conf/dev.json'
                     ],
                     tasks: ['express:dev'],
                     options: {
@@ -158,12 +158,11 @@ module.exports = function (grunt) {
             'cssmin',
             'processhtml'
         ],
-        clientConfig = grunt.file.readJSON('public/config/grunt.json'),
         DEV_HTML_PATH = 'public/views/',
         PLAY_VIEWS_PATH = 'app/japidviews/FrontendController/';
 
-    // 初始化 clientConfig
-    initClientConfig();
+    // 初始化 devConfig
+    initDevConfig();
 
     // 翻译任务任务
     translate();
@@ -205,15 +204,15 @@ module.exports = function (grunt) {
     ]);
 
     /**
-     * 初始化 clientConfig
-     * 将多语言 clientConfig.languages 写到 clientConfig.views
+     * 初始化 devConfig
+     * 将多语言 devConfig.languages 写到 devConfig.views
      */
-    function initClientConfig() {
+    function initDevConfig() {
         var langViews = [];
-        if (clientConfig.languages && clientConfig.languages.files) {
-            clientConfig.languages.files.forEach(function (file) {
+        if (devConfig.languages && devConfig.languages.files) {
+            devConfig.languages.files.forEach(function (file) {
                 var view;
-                clientConfig.views.some(function (v) {
+                devConfig.views.some(function (v) {
                     if (v.html === file) {
                         view = v;
                         return true;
@@ -221,7 +220,7 @@ module.exports = function (grunt) {
                     return false;
                 });
                 if (view) {
-                    clientConfig.languages.lang.forEach(function (lang) {
+                    devConfig.languages.lang.forEach(function (lang) {
                         var v = Object.create(view);
                         v.html += '_' + lang;
                         langViews.push(v);
@@ -229,14 +228,14 @@ module.exports = function (grunt) {
                     view.html = '';
                 }
             });
-            clientConfig.views = clientConfig.views.concat(langViews);
+            devConfig.views = devConfig.views.concat(langViews);
         }
     }
 
     // 添加模版转换任务
     function htmlRelease() {
 
-        var htmlConfig = clientConfig.views,
+        var htmlConfig = devConfig.views,
             i;
         for (i = 0; i < htmlConfig.length; ++i) {
             if (!htmlConfig[i].html) {
@@ -327,9 +326,9 @@ module.exports = function (grunt) {
 
     // 翻译任务任务
     function translate() {
-        var i, j, LANGUAGES = clientConfig.languages.lang,
-            FILES = clientConfig.languages.files,
-            U2_FILES = clientConfig.languages.u2Files,
+        var i, j, LANGUAGES = devConfig.languages.lang,
+            FILES = devConfig.languages.files,
+            U2_FILES = devConfig.languages.u2Files,
             lang, conf, watchFiles = [],
             watchTasks = [];
         for (i = 0; i < LANGUAGES.length; i++) {

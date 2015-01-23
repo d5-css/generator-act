@@ -2,9 +2,11 @@
   "name": "<%= _.slugify(actName) %>",
   "version": "1.0.0",
   "private": true,
+  "dependencies": {
+    "express": "^4.11.1"
+  },
   "devDependencies": {
     "connect-inject": "~0.3.2",
-    "express": "3.x",
     "grunt": "~0.4.0",
     "grunt-banner": "~0.2.3",
     "grunt-bower": "~0.9.1",

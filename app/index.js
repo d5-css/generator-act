@@ -46,6 +46,7 @@ var ActGenerator = yeoman.generators.Base.extend({
 
     projectfiles: function() {
         this.copy('jshintrc', '.jshintrc');
+
         this.mkdir('public');
         this.mkdir('public/js');
         this.copy('public/js/seajs/sea.js', 'public/js/seajs/sea.js');
@@ -54,18 +55,16 @@ var ActGenerator = yeoman.generators.Base.extend({
         this.mkdir('public/images');
         this.mkdir('public/views');
         this.template('public/views/_index.html', 'public/views/index.html');
-        this.mkdir('public/config');
+
+        this.mkdir('conf');
+        this.template('conf/_dev.json', 'conf/dev.json');
     },
 
-    express: function() {
-        this.copy('public/config/mock.js', 'public/config/mock.js');
-        this.template('public/config/_server.json', 'public/config/server.json');
-        this.mkdir('express');
-        this.copy('express/server.js', 'express/server.js');
+    server: function() {
+        this.directory('server', 'server');
     },
 
     grunt: function() {
-        this.copy('public/config/grunt.json', 'public/config/grunt.json');
         this.copy('Gruntfile.js', 'Gruntfile.js');
     },
 

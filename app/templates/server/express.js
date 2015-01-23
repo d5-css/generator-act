@@ -3,11 +3,11 @@
 var express = require('express');
 var Mock = require('mockjs');
 
-var CONFIG = require('../public/config/server.json');
-var PATH = CONFIG.PATH;
-var LIVERELOAD_PORT = CONFIG.LIVERELOAD_PORT || 35729;
-var WEINRE_ID = CONFIG.WEINRE_ID || 'uc_activity';
-var PORT = CONFIG.PORT || 9000;
+var CONFIG = require('../conf/dev.json');
+var PATH = CONFIG.path;
+var LIVERELOAD_PORT = (CONFIG.livereload || '').port || 35729;
+var WEINRE_ID = (CONFIG.weinre || '').id || 'uc_activity';
+var PORT = process.env.PORT || 9000;
 
 function genScript(src) {
     return src ? '<script src="' + src + '"><\\/script>' : '';
@@ -17,12 +17,12 @@ var app = express();
 
 // 插入 LIVERELOAD 和 WEINRE
 var snippet = '';
-if (CONFIG.LIVERELOAD || CONFIG.WEINRE) {
+if (!process.env.UAE_MODE && (CONFIG.livereload.enable || CONFIG.weinre.enable)) {
     snippet = '\n<script>//<![CDATA[\ndocument.write(\'';
-    if (CONFIG.LIVERELOAD) {
+    if (CONFIG.livereload.enable) {
         snippet += genScript('//\' + (location.hostname || \'localhost\') + \':' + LIVERELOAD_PORT + '/livereload.js');
     }
-    if (CONFIG.WEINRE && WEINRE_ID) {
+    if (CONFIG.weinre.enable && WEINRE_ID) {
         snippet += genScript('//weinre.uae.ucweb.local/target/target-script-min.js#' + WEINRE_ID);
     }
     snippet += '\')\n//]]></script>\n';
@@ -35,21 +35,21 @@ if (CONFIG.LIVERELOAD || CONFIG.WEINRE) {
 function indexHandler(req, res) {
     res.sendfile('public/views/index.html');
 }
-app.get(PATH + '/', indexHandler);
-app.get(PATH + '/index', indexHandler);
+app.get('/', indexHandler);
+app.get('/index', indexHandler);
 
-// 和后端的路径保持一致
-app.use(PATH, express.static(process.cwd()));
+// 静态资源
+app.use(express.static(process.cwd()));
 
 // Mock 数据模拟
-var MOCKS = require('../public/config/mock');
-if (MOCKS && MOCKS.length) {
+var MOCKS = require('./mock');
+if (!process.env.UAE_MODE && MOCKS.length) {
     // 遍历 mock 数组
     MOCKS.forEach(function (mockConf) {
         if (mockConf.path) {
             mockConf.method = mockConf.method || 'get';
             // 接入 express
-            app[mockConf.method](PATH + mockConf.path, function (req, res) {
+            app[mockConf.method](mockConf.path, function (req, res) {
                 // 延迟输出
                 setTimeout(function() {
                     res.send(Mock.mock(mockConf.data));
@@ -60,6 +60,8 @@ if (MOCKS && MOCKS.length) {
 }
 
 // 启动
-app.listen(PORT, function() {
+var server = express();
+server.use(PATH, app);
+server.listen(PORT, function() {
     console.log('Server listening on port ' + PORT);
 });
