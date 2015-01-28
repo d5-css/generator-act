@@ -1,5 +1,4 @@
 {
-    "path": "/<%= actName %>",
     "port": 9000,
     "livereload": {
         "enable": true,
@@ -21,9 +20,7 @@
         }
     ],
     "languages": {
-        "files": [
-            "index"
-        ],
+        "files": [],
         "u2Files": [],
         "lang": []
     }

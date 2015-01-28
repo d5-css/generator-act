@@ -19,7 +19,7 @@ var LangGenerator = yeoman.generators.NamedBase.extend({
         if (!this.name) {
             return;
         }
-        var gruntConfigFilePath = 'public/config/grunt.json',
+        var gruntConfigFilePath = 'conf/dev.json',
             gruntConfigStr = this.readFileAsString(gruntConfigFilePath),
             gruntConfig;
         try {

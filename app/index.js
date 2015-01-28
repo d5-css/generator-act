@@ -58,6 +58,9 @@ var ActGenerator = yeoman.generators.Base.extend({
 
         this.mkdir('conf');
         this.template('conf/_dev.json', 'conf/dev.json');
+        this.template('conf/_config.json', 'conf/config.json');
+
+        this.copy('Procfile', 'Procfile');
     },
 
     server: function() {
