@@ -148,6 +148,13 @@ module.exports = function (grunt) {
                     }]
                 }
             },
+            'file_modified': {
+                images: {
+                    options: {
+                        files: ['public/images/**/*']
+                    }
+                }
+            },
             replace: {}
         },
         defaultTask = [
@@ -174,7 +181,8 @@ module.exports = function (grunt) {
         'hashres',
         'usebanner',
         'clean:cmd',
-        'imagemin:dist'
+        'imagemin:dist',
+        'file_modified'
     ]);
 
     grunt.initConfig(initConfig);
@@ -192,6 +200,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-express-server');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-imagemin');
+    grunt.loadNpmTasks('grunt-file-modified');
 
     // 发布任务
     grunt.registerTask('default', defaultTask);
