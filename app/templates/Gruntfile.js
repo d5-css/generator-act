@@ -135,6 +135,7 @@ module.exports = function (grunt) {
                     }
                 }
             },
+            // 压缩图片
             imagemin: {
                 dist: {
                     options: {
@@ -148,6 +149,7 @@ module.exports = function (grunt) {
                     }]
                 }
             },
+            // 图片文件变化
             'file_modified': {
                 images: {
                     options: {
@@ -155,6 +157,18 @@ module.exports = function (grunt) {
                     }
                 }
             },
+            // BrowserSync
+            browserSync: {
+                dev: {
+                    bsFiles: {
+                        src : 'public/css/*.css'
+                    },
+                    options: {
+                        proxy: '127.0.0.1:' + devConfig.port
+                    }
+                }
+            },
+            // 各种替换
             replace: {}
         },
         defaultTask = [
@@ -201,6 +215,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-imagemin');
     grunt.loadNpmTasks('grunt-file-modified');
+    grunt.loadNpmTasks('grunt-browser-sync');
 
     // 发布任务
     grunt.registerTask('default', defaultTask);
@@ -209,6 +224,8 @@ module.exports = function (grunt) {
     // 开发服务器任务
     grunt.registerTask('dev', [
         'express:dev',
+        // TODO: browserSync 视乎和 livereload 不兼容
+        // 'browserSync',
         'watch'
     ]);
 
