@@ -8,7 +8,7 @@ var app = express();
 // 开发模式，插入 LIVERELOAD 和 WEINRE
 var snippet = '';
 if (!process.env.UAE_MODE) {
-    var DEV_CONFIG = require('../conf/dev.json');
+    var DEV_CONFIG = require('../conf/dev.json') || {};
     var LIVERELOAD_PORT = (DEV_CONFIG.livereload || '').port || 35729;
     var WEINRE_ID = (DEV_CONFIG.weinre || '').id || 'uc_activity';
     var genScript = function (src) {
@@ -60,6 +60,11 @@ if (!process.env.UAE_MODE && MOCKS.length) {
             });
         }
     });
+}
+
+// 如果是开发模式，在处理完 页面、静态资源 和 Mock 之后再将全部请求丢入 RAP
+if (!process.env.UAE_MODE && DEV_CONFIG.rap && DEV_CONFIG.rap.enable) {
+    app.use(require('./rap'));
 }
 
 // 启动

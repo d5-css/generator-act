@@ -8,6 +8,10 @@
         "enable": true,
         "id": "<%= actName %>"
     },
+    "rap": {
+        "enable": true,
+        "projectId": 1
+    },
     "views": [
         {
             "html": "index",
