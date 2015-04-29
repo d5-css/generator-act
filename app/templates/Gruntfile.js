@@ -131,7 +131,7 @@ module.exports = function (grunt) {
                         'public/**/*'
                     ],
                     options: {
-                        livereload: true
+                        livereload: devConfig.livereload.enable?devConfig.livereload.port:false
                     }
                 }
             },
@@ -391,7 +391,7 @@ module.exports = function (grunt) {
                 files: watchFiles,
                 tasks: watchTasks,
                 options: {
-                    livereload: true
+                    livereload: devConfig.livereload.enable?devConfig.livereload.port:false
                 }
             };
             initConfig.watch.translate.files.push('languages/*');
