@@ -2,6 +2,7 @@
 
 var express = require('express');
 var CONFIG = require('../conf/config.json');
+var fs = require('fs');
 
 var app = express();
 
@@ -30,15 +31,23 @@ if (!process.env.UAE_MODE) {
     }
 }
 
-
-// 首页为 index.html
-function indexHandler(req, res) {
-    res.sendFile('public/views/index.html', {
-        root: process.cwd()
-    });
+function htmlHandler(html) {
+    return function (req, res) {
+            res.sendFile('public/views/'+html+'.html', {
+            root: process.cwd()
+        });
+    }
 }
-app.get('/', indexHandler);
-app.get('/index', indexHandler);
+//自动读取public/views目录下的html文件，访问路径默认为文件名
+fs.readdir('public/views/', function(err, files){
+    var fileName;
+    for(var i=0; i<files.length; i++){
+        fileName = files[i];
+        fileName = fileName.substring(0, fileName.lastIndexOf('.html'));
+        app.get('/' + fileName, htmlHandler(fileName));
+    }
+    app.get('/', htmlHandler('index'));
+});
 
 // 静态资源
 app.use(express.static(process.cwd()));
