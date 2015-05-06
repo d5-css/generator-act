@@ -153,7 +153,7 @@ module.exports = function (grunt) {
             'file_modified': {
                 images: {
                     options: {
-                        files: ['public/images/**/*']
+                        paths: ['public/images/']
                     }
                 }
             },

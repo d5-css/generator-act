@@ -33,7 +33,7 @@ if (!process.env.UAE_MODE) {
 
 function htmlHandler(html) {
     return function (req, res) {
-            res.sendFile('public/views/'+html+'.html', {
+        res.sendFile('public/views/'+html+'.html', {
             root: process.cwd()
         });
     }

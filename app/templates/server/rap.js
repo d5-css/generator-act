@@ -4,7 +4,10 @@ var http = require('http');
 var Mock = require('mockjs');
 
 var CONFIG = require('../conf/dev.json').rap || {};
-var URL_PREFIX = (CONFIG.prefix || 'http://dev6.ucweb.local:15944/mockjs/' ) + CONFIG.projectId;
+var URL_PROXY_ID = '{id}';
+var URL_PROXY_PATTERN = '{pattern}';
+var URL_PROXY = (CONFIG.proxy || 'http://rap.uae.ucweb.local/mock/createRule.action?id=' + URL_PROXY_ID + '&pattern=' + URL_PROXY_PATTERN)
+                    .replace(URL_PROXY_ID, CONFIG.projectId);
 
 module.exports = function (req, res, next) {
     // 完整的 URL 则直接跳出 RAP
@@ -13,7 +16,8 @@ module.exports = function (req, res, next) {
         return;
     }
     // 拼接URL 到 rap mock 接口，获取 mock 模板
-    http.get(URL_PREFIX + req.url, function (rapResponse) {
+    var url = URL_PROXY.replace(URL_PROXY_PATTERN, encodeURIComponent(req.url));
+    var httpGet = http.get(url, function (rapResponse) {
         if (200 <= rapResponse.statusCode && rapResponse.statusCode < 300) {
             console.log('[Mock]: ' + req.url);
             rapResponse.on('data', function (chunk) {
@@ -41,4 +45,12 @@ module.exports = function (req, res, next) {
     }, function () {
         next();
     });
+
+    // catch rap error
+    httpGet.on('error', function (err) {
+        console.log(err);
+        next();
+    });
+
+    httpGet.end();
 };
