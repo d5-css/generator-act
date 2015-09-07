@@ -168,8 +168,35 @@ module.exports = function (grunt) {
                     }
                 }
             },
+
             // 各种替换
-            replace: {}
+            replace: {},
+
+            // 计算gzip之后的资源大小, 方便大小预估
+            gzip: {
+                options: { detail: false /*如果需要看每一个文件的gzip之后大小，可以改为true, 显示压缩细节*/},
+                /**  使用例子
+                //预估首页资源大小
+                index: {
+                    src: [
+                        './public/views/index.html',
+                        './public/images/*.png',
+                        '!./public/images/box.png', //排除掉首页不需要的图片
+                        './public/dist/app.*.js',
+                        './public/dist/style.*.css'
+                    ]
+                },
+                //预估pc也资源大小
+                pc: {
+                    src: [
+                        './public/views/pc.html',
+                        './public/images/pc/*',
+                        './public/dist/pc.*.js',
+                        './public/dist/pc.*.css'
+                    ]
+                }
+                */
+            }
         },
         defaultTask = [
             'jshint',
@@ -216,6 +243,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-imagemin');
     grunt.loadNpmTasks('grunt-file-modified');
     grunt.loadNpmTasks('grunt-browser-sync');
+    grunt.loadNpmTasks('grunt-gzip');
 
     // 发布任务
     grunt.registerTask('default', defaultTask);
