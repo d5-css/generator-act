@@ -196,6 +196,24 @@ module.exports = function (grunt) {
                     ]
                 }
                 */
+            },
+            //在线压缩图片，注意:每个apkKey一个月只能免费压缩500张图片，如果用完了，请转到https://tinypng.com/developers申请新的apiKey
+            //暂时只支持jpg和png图片压缩
+            tinypng: {
+                options: {
+                    apiKey: devConfig.tinypng.apiKey,
+                    checkSigs: true,
+                    sigFile: 'config/.tinypng_file_compressed',
+                    summarize: true,
+                    showProgress: true,
+                    stopOnImageError: true
+                },
+                compress: {
+                    expand: true, 
+                    cwd: 'public/images/',
+                    src: ['*.png', '*.jpg'],
+                    dest: 'public/images/'
+                }
             }
         },
         defaultTask = [
@@ -244,6 +262,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-file-modified');
     grunt.loadNpmTasks('grunt-browser-sync');
     grunt.loadNpmTasks('grunt-gzip');
+    grunt.loadNpmTasks('grunt-tinypng');
 
     // 发布任务
     grunt.registerTask('default', defaultTask);
@@ -256,6 +275,8 @@ module.exports = function (grunt) {
         // 'browserSync',
         'watch'
     ]);
+    // tinypng服务器端压缩图片，不能命名为tinypng，会造成任务名冲突
+    grunt.registerTask('tinyimage', ['tinypng']);
 
     /**
      * 初始化 devConfig
