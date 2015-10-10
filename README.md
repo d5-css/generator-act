@@ -20,18 +20,18 @@ $ cd my-project
 $ yo act
 ```
 
-### 添加组件
+### 添加页面
 
 ```
-$ yo act:cmp <cmp-name>
+$ yo act:page <pageName>
 ```
 
-其中 `cmp-name` 为组件名
+其中 `pageName` 为页面名
 
-### 添加语言包
+### 添加国际化配置
 
 ```
-$ yo act:lang <language>
+$ yo act:i18n <language>
 ```
 
 其中 `language` 为语言名称，如 `en`，`ru` 等

@@ -1,0 +1,3 @@
+'use strict';
+
+// CommonJS
