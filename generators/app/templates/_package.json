@@ -4,5 +4,18 @@
   "private": true,
   "engines": {
     "node": ">=4.0.0"
+  },
+  "scripts": {
+    "start": "node server/app.js"
+  },
+  "dependencies": {
+    "koa": "^1.0.0",
+    "koa-mount": "^1.3.0",
+    "koa-regexp-router": "^0.0.1"
+  },
+  "devDependencies": {
+    "browserify": "^11.2.0",
+    "spark-md5": "^1.0.0",
+    "uglify-js": "^2.4.24"
   }
 }

@@ -16,7 +16,8 @@ module.exports = generators.Base.extend({
 
     // 创建文件结构
     makeProjectDirectoryStructure: function () {
-        var pageFileName = 'pages/' + this.pageName + '/' + this.pageName;
+        // 固定入口文件为 `pages/${pageName}/index.${html|js|css}`
+        var pageFileName = 'pages/' + this.pageName + '/index';
         this.template('_page.html', pageFileName + '.html');
         this.copy('page.js', pageFileName + '.js');
         // todo css: less or sass

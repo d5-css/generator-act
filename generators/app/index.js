@@ -38,17 +38,7 @@ module.exports = generators.Base.extend({
     // npm install depedencies
     npmInstallDepedencies: function () {
         if (!this.options['skip-install']) {
-            this.npmInstall([
-                'express'
-            ], {
-                save: true
-            });
-
-            this.npmInstall([
-                'browserify'
-            ], {
-                saveDev: true
-            });
+            this.npmInstall();
         }
     }
 });
