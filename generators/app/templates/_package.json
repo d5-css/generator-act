@@ -6,7 +6,7 @@
     "node": ">=4.0.0"
   },
   "scripts": {
-    "start": "node server/app.js"
+    "start": "DEBUG=true node server/app.js"
   },
   "dependencies": {
     "koa": "^1.0.0",

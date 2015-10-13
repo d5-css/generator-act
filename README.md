@@ -20,15 +20,21 @@ $ cd my-project
 $ yo act
 ```
 
-### 添加页面
+### 生成页面文件
 
 ```
-$ yo act:page <pageName>
+$ yo act:view <viewName>
 ```
 
-其中 `pageName` 为页面名
+其中 `viewName` 为页面名
 
-### 添加国际化配置
+### 生成组件文件
+
+```
+$ yo act:cmp <componentName>
+```
+
+### 生成国际化配置文件
 
 ```
 $ yo act:i18n <language>

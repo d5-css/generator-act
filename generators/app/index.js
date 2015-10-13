@@ -10,7 +10,7 @@ module.exports = generators.Base.extend({
     },
 
     // 询问 活动名称
-    prompting: function () {
+    promptActName: function () {
         var done = this.async();
         var defaultName = changeCase.paramCase(this.appname); // Default to current folder name
         this.prompt({
@@ -25,6 +25,20 @@ module.exports = generators.Base.extend({
         }.bind(this));
     },
 
+    // 创建示例组件和页面
+    promptExample: function () {
+        var done = this.async();
+        this.prompt({
+            type: 'input',
+            name: 'exampleComponent',
+            message: 'Create example component and view? (y/n)',
+            default: 'y'
+        }, function (answers) {
+            this.exampleComponent = answers.exampleComponent.toLowerCase() === 'y';
+            done();
+        }.bind(this));
+    },
+
     // 创建文件结构
     makeProjectDirectoryStructure: function () {
         this.template('_package.json', 'package.json');
@@ -33,6 +47,15 @@ module.exports = generators.Base.extend({
         this.template('conf/_config.json', 'conf/config.json');
 
         this.directory('server', 'server');
+        this.directory('tasks', 'tasks');
+    },
+
+    // 创建示例组件和页面
+    createExampleComponentAndView: function () {
+        if (this.exampleComponent) {
+            this.spawnCommand('yo', ['act:cmp', 'example']);
+            this.spawnCommand('yo', ['act:view', 'example']);
+        }
     },
 
     // npm install depedencies

@@ -2,18 +2,18 @@
 
 const browserify = require('browserify');
 const hash = require('spark-md5').hash;
+const DEBUG = !!process.env.DEBUG;
 
 /**
  * combo js
  * @param {string} src           src file path
- * @param {boolean} debug        is debug
  * @yield {string} ouput combo js content
  */
-exports.js = function * (src, debug) {
+exports.js = function * (src) {
     // 环境
     let uglify;
-    let browserifyOpts = { debug };
-    if (debug) {
+    let browserifyOpts = { debug: DEBUG };
+    if (DEBUG) {
         // 开发环境
         // uglify 啥都不做，假装和 uglify-js 的输出相同
         uglify = code => ({ code: code });
