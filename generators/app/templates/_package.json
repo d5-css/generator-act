@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "browserify": "^11.2.0",
+    "node-sass": "^3.3.3",
     "spark-md5": "^1.0.0",
     "uglify-js": "^2.4.24"
   }

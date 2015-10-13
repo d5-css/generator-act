@@ -28,8 +28,13 @@ app.use(regexpRouter(REG_PAGE_JS, function * (reqPath, viewName) {
 }));
 
 /**
- * TODO: css
+ * css
  */
+const REG_PAGE_CSS = /^\/([\w\-]+)\/(\w+)\.css$/;
+app.use(regexpRouter(REG_PAGE_CSS, function * (reqPath, viewName) {
+    this.type = 'text/css';
+    this.body = yield taskView.css(viewName);
+}));
 
 
 // 启动服务

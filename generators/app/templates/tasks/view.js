@@ -9,6 +9,7 @@ const DEBUG = !!process.env.DEBUG;
 const CMP_PATH = path.join(__dirname, '../components');
 const VIEW_PATH = path.join(__dirname, '../views');
 const TMP_JS_NAME = '.tmp.js';
+const TMP_CSS_NAME = '.tmp.scss';
 
 function readFile(filePath) {
     try {
@@ -26,6 +27,9 @@ let renderJs = exports.js = function * (viewName) {
     return yield combo.js(getViewFile(viewName, TMP_JS_NAME));
 };
 
+let renderCss = exports.css = function * (viewName) {
+    return yield combo.css(getViewFile(viewName, TMP_CSS_NAME));
+};
 
 exports.render = function * (viewName) {
     let html = readFile(getViewFile(viewName, 'index.html'));
@@ -45,14 +49,17 @@ exports.render = function * (viewName) {
             );
         }
     });
-    // 合并 js
-    let mainJsContent = readFile(getViewFile(viewName, 'index.js'));
-    let componentRequireList = [];
-    let componentList = [];
+    // 检查全部使用过的组件
+    let componentImportList = []; // for css
+    let componentRequireList = []; // for js
+    let componentList = []; // for js
     usedCmps.forEach(cmpName => {
+        componentImportList.push(`@import '../../components/${cmpName}/${cmpName}';`);
         componentRequireList.push(`require('../../components/${cmpName}/${cmpName}');`);
         componentList.push(`'${cmpName}'`);
     });
+    // 合并 js
+    let mainJsContent = readFile(getViewFile(viewName, 'index.js'));
     mainJsContent = `${componentRequireList.join('\n')}
         [${componentList.join(',')}].forEach(function (cmpName) {
             var elCmps = document.querySelectorAll('.cmp-' + cmpName);
@@ -71,7 +78,12 @@ exports.render = function * (viewName) {
         </script>
         <script src="${comboJsFileName}"></script>`;
     html = html.replace('</html>', `${scripts}</html>`);
-    // TODO: css
+    // 合并 css
+    fs.writeFileSync(getViewFile(viewName, TMP_CSS_NAME), componentImportList.join('\n'));
+    let comboCssContent = yield renderCss(viewName);
+    let comboCssFileName = combo.fileName(comboCssContent, 'css');
+    let styles = `<link rel="stylesheet" href="${comboCssFileName}">`;
+    html = html.replace('</head>', `${styles}</head>`);
     return html;
 };
 

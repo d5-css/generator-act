@@ -1,6 +1,8 @@
 'use strict';
 
+
 const browserify = require('browserify');
+const sass = require('node-sass');
 const hash = require('spark-md5').hash;
 const DEBUG = !!process.env.DEBUG;
 
@@ -34,6 +36,20 @@ exports.js = function * (src) {
         });
 };
 
+
+exports.css = function * (src) {
+    return yield cb => sass.render({
+        file: src,
+        sourceMap: DEBUG
+    }, (err, res) => {
+        if (err) { 
+            cb(err);
+        } else {
+            cb(null, res.css.toString());
+        }
+    });
+};
+
 /**
  * generate hash file name
  * @param  {string} content file content
@@ -41,5 +57,5 @@ exports.js = function * (src) {
  * @return {string}         file name with hash
  */
 exports.fileName = function (content, type) {
-    return hash(content).substr(0, 8) + '.' + type;
+    return hash(content || '').substr(0, 8) + '.' + type;
 };
