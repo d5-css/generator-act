@@ -11,7 +11,7 @@
   "latedef": true,
   "newcap": true,
   "noarg": true,
-  "predef": ["require"],
+  "predef": ["fis"],
   "quotmark": "single",
   "regexp": true,
   "undef": true,

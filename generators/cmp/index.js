@@ -1,9 +1,6 @@
 'use strict';
 
-var path = require('path');
 var generators = require('yeoman-generator');
-var bower = require('bower');
-var chalk = require('chalk');
 var _ = require('lodash');
 
 module.exports = generators.Base.extend({
@@ -52,6 +49,13 @@ module.exports = generators.Base.extend({
                     cmpnt = 'git@' + gitLocation + ':' + cmpnt;
                 }
                 // 通过 bower 下载
+                this.bowerInstall(cmpnt, {
+                    save: true
+                });
+                /* 手动下载。。。
+                var path = require('path');
+                var bower = require('bower');
+                var chalk = require('chalk');
                 // tips
                 this.log(chalk.cyan('installing ') + cmpnt);
                 bower.commands
@@ -69,6 +73,7 @@ module.exports = generators.Base.extend({
                         // write package.json
                         this.fs.writeJSON(PACKAGE_JSON_PATH, packageContent, null, 4);
                     }).bind(this));
+                 */
                 break;
         }
     }

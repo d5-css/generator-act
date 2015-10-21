@@ -1,6 +1,7 @@
 'use strict';
 
 var generators = require('yeoman-generator');
+var chalk = require('chalk');
 var _ = require('lodash');
 
 module.exports = generators.Base.extend({
@@ -34,6 +35,7 @@ module.exports = generators.Base.extend({
         this.template('_fis-conf.js', 'fis-conf.js');
 
         this.copy('jshintrc', '.jshintrc');
+        this.copy('release.sh', 'release.sh');
 
         this.directory('fis', 'fis');
         this.directory('i18n', 'i18n');
@@ -41,22 +43,28 @@ module.exports = generators.Base.extend({
     },
 
     // npm install depedencies
-    npmInstallDepedencies: function() {
-        var that = this;
-        // var done = this.async();
+    install: function() {
         if (!this.options['skip-install']) {
-            this.installDependencies({
-                bower: false,
-                npm: true,
-                callback: function() {
-                    that._showTips();
-                }
-            });
+            this.log(chalk.cyan('> ') + 'npm install');
+            this.npmInstall(null, null, function () {
+                this._showTips();
+            }.bind(this));
+        } else {
+            this._showTips();
         }
-
     },
 
+    // show sub-cmd tips
+    // 下划线开头的 key 不会默认执行
     _showTips: function() {
-        this.log('Use `yo act:view <name>` to create new view!');
+        this.log(
+            '\n' +
+            chalk.cyan('Tips ') +
+            'Use `' + 
+            chalk.green('yo act:view <view-name>') +
+            '` to create views!\n     Use `' + 
+            chalk.green('yo act:cmp new <cmp-name>') +
+            '` to create components!'
+        );
     }
 });
