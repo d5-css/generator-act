@@ -26,18 +26,18 @@ module.exports = generators.Base.extend({
     },
 
     // 创建示例组件和页面
-    promptExample: function () {
-        var done = this.async();
-        this.prompt({
-            type: 'input',
-            name: 'exampleComponent',
-            message: 'Create example component and view? (y/n)',
-            default: 'y'
-        }, function (answers) {
-            this.exampleComponent = answers.exampleComponent.toLowerCase() === 'y';
-            done();
-        }.bind(this));
-    },
+    // promptExample: function () {
+    //     var done = this.async();
+    //     this.prompt({
+    //         type: 'input',
+    //         name: 'exampleComponent',
+    //         message: 'Create example component and view? (y/n)',
+    //         default: 'y'
+    //     }, function (answers) {
+    //         this.exampleComponent = answers.exampleComponent.toLowerCase() === 'y';
+    //         done();
+    //     }.bind(this));
+    // },
 
     // 创建文件结构
     makeProjectDirectoryStructure: function () {
@@ -47,21 +47,19 @@ module.exports = generators.Base.extend({
         this.template('conf/_config.json', 'conf/config.json');
 
         this.directory('server', 'server');
-        this.directory('tasks', 'tasks');
-    },
-
-    // 创建示例组件和页面
-    createExampleComponentAndView: function () {
-        if (this.exampleComponent) {
-            this.spawnCommand('yo', ['act:cmp', 'example']);
-            this.spawnCommand('yo', ['act:view', 'example']);
-        }
     },
 
     // npm install depedencies
     npmInstallDepedencies: function () {
+        var done = this.async();
         if (!this.options['skip-install']) {
-            this.npmInstall();
+            this.npmInstall(done);
         }
+    },
+
+    showTips: function () {
+        this.log('Use `yo act:view <name>` to create new view!');
     }
+
+
 });

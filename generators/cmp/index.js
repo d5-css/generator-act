@@ -8,6 +8,9 @@ module.exports = generators.Base.extend({
         // Calling the super constructor is important so our generator is correctly set up
         generators.Base.apply(this, arguments);
 
+        // This makes `subCommander` a required argument.
+        this.argument('subCommander', { type: String, required: true });
+
         // This makes `componentName` a required argument.
         this.argument('componentName', { type: String, required: true });
         // And you can then access it later on this way;
