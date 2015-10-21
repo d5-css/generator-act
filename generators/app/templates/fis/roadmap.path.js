@@ -4,6 +4,10 @@ module.exports = [
         release: false
     },
     {
+        reg: 'bower_components/**',
+        release: false
+    },
+    {
         reg: /^\/views\/([^\/]+)\/backend-data.json$/,
         packRelease: false
     },

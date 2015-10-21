@@ -31,6 +31,7 @@ module.exports = generators.Base.extend({
     makeProjectDirectoryStructure: function() {
         this.template('_package.json', 'package.json');
         this.template('_bower.json', 'bower.json');
+        this.template('_fis-conf.js', 'fis-conf.js');
 
         this.copy('jshintrc', '.jshintrc');
 
