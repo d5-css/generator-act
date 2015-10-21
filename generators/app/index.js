@@ -1,12 +1,7 @@
 'use strict';
 
 var generators = require('yeoman-generator'),
-    changeCase = require('change-case'),
-    path = require('path'),
-    fs = require('fs'),
-    slice = Array.prototype.slice,
-    toString = Object.prototype.toString,
-    templatePath = path.resolve(__dirname, 'templates');
+    changeCase = require('change-case');
 
 module.exports = generators.Base.extend({
     constructor: function() {
@@ -30,12 +25,6 @@ module.exports = generators.Base.extend({
             this.gitName = this.user.git.name();
             this.gitEmail = this.user.git.email();
             done();
-
-            that._getTemplate(function(err, template) {
-                if (err) return done(err);
-                that.sourceRoot(template);
-                done();
-            });
         }.bind(this));
     },
 
@@ -67,23 +56,21 @@ module.exports = generators.Base.extend({
 
     // npm install depedencies
     npmInstallDepedencies: function() {
-        var done = this.async();
+        var that = this;
+        // var done = this.async();
         if (!this.options['skip-install']) {
-            // 执行不通过，先注释了
-            // this.npmInstall(done);
+            this.installDependencies({
+                bower: false,
+                npm: true,
+                callback: function() {
+                    that._showTips();
+                }
+            });
         }
+
     },
 
-    showTips: function() {
+    _showTips: function() {
         this.log('Use `yo act:view <name>` to create new view!');
-    },
-
-    _getTemplate: function(callback) {
-        var cacheTemplate = templatePath;
-        callback = callback || function() {};
-
-        if (fs.existsSync(cacheTemplate)) {
-            return callback.call(this, null, cacheTemplate);
-        }
     }
 });
