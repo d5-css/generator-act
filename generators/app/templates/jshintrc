@@ -1,7 +1,10 @@
 {
     "bitwise": true,
+    "browser": true,
     "camelcase": true,
+    "devel": true,
     "eqeqeq": true,
+    "eqnull": true,
     "esnext": true,
     "forin": true,
     "immed": true,
@@ -9,15 +12,13 @@
     "latedef": false,
     "newcap": true,
     "noarg": true,
+    "node": true,
     "noempty": true,
+    "predef": ["fis"],
     "quotmark": "single",
     "undef": true,
     "unused": true,
     "strict": true,
     "trailing": true,
-    "eqnull": true,
-    "browser": true,
-    "devel": true,
-    "node": true,
     "white": false
 }

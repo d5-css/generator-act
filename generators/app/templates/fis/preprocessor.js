@@ -50,7 +50,6 @@ exports.I18N = function (content, file) {
 
 var deasync = require('deasync');
 var browserify = require('browserify');
-var REQUIRE_REG = /require\('([^']+)'\)/g;
 
 exports.JS = function (content, file) {
     if (file.isLayout && file.isJsLike) {
@@ -58,6 +57,11 @@ exports.JS = function (content, file) {
         // do browserify
         browserify(file.realpath, {
             debug: true
+        }).on('file', function (depFilePath) {
+            // find dependences
+            if (depFilePath !== file.realpath) {
+                file.cache.addDeps(depFilePath);
+            }
         }).bundle(function (err, buff) {
             if (err) {
                 console.error(err.message);
@@ -66,25 +70,12 @@ exports.JS = function (content, file) {
             }
             isDone = true;
         });
-        // simply find dependences
-        var matches = [];
-        while (matches) {
-            var depFile = matches[1];
-            if (depFile) {
-                if (!/\.js$/.test(depFile)) {
-                    depFile += '.js';
-                }
-                depFile = path.resolve(file.dirname, depFile);
-                if (fs.existsSync(depFile)) {
-                    file.cache.addDeps(depFile);
-                }
-            }
-            matches = REQUIRE_REG.exec(content);
-        }
         // 使用 deasync 让 browserify 同步输出到 content
         deasync.loopWhile(function (){
             return !isDone;
         });
+        // TODO: 是否可以跳过默认的 processor
+        // 因为路径可能改变
     }
     return content;
 };
