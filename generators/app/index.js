@@ -11,8 +11,7 @@ module.exports = generators.Base.extend({
 
     // 询问 活动名称
     promptActName: function() {
-        var that = this,
-            done = this.async();
+        var done = this.async();
         var defaultName = changeCase.paramCase(this.appname); // Default to current folder name
         this.prompt({
             type: 'input',
@@ -28,23 +27,8 @@ module.exports = generators.Base.extend({
         }.bind(this));
     },
 
-    // 创建示例组件和页面
-    // promptExample: function () {
-    //     var done = this.async();
-    //     this.prompt({
-    //         type: 'input',
-    //         name: 'exampleComponent',
-    //         message: 'Create example component and view? (y/n)',
-    //         default: 'y'
-    //     }, function (answers) {
-    //         this.exampleComponent = answers.exampleComponent.toLowerCase() === 'y';
-    //         done();
-    //     }.bind(this));
-    // },
-
     // 创建文件结构
     makeProjectDirectoryStructure: function() {
-        this.template('conf/_config.json', 'conf/config.json');
         this.template('_package.json', 'package.json');
 
         this.copy('jshintrc', '.jshintrc');
