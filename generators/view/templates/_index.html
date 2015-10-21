@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>view - <%= viewName %></title>
+    <link rel="stylesheet" type="text/css" href="<%= viewName %>.less">
+</head>
+<body>
+    <!-- Components here -->
+    {{{unit name="cmpname"}}}
+    <!-- Components end -->
+    <script type="text/javascript">
+    window.__data = __BACKEND_DATA__;
+    </script>
+    <script type="text/javascript" src="<%= viewName %>.js"></script>
+</body>
+</html>

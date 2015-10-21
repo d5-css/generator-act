@@ -1,7 +1,7 @@
 'use strict';
 
-var generators = require('yeoman-generator'),
-    changeCase = require('change-case');
+var generators = require('yeoman-generator');
+var _ = require('lodash');
 
 module.exports = generators.Base.extend({
     constructor: function() {
@@ -12,7 +12,7 @@ module.exports = generators.Base.extend({
     // 询问 活动名称
     promptActName: function() {
         var done = this.async();
-        var defaultName = changeCase.paramCase(this.appname); // Default to current folder name
+        var defaultName = _.kebabCase(this.appname); // Default to current folder name
         this.prompt({
             type: 'input',
             name: 'actName',
@@ -20,7 +20,7 @@ module.exports = generators.Base.extend({
             default: defaultName
         }, function(answers) {
             var actName = answers.actName.toLowerCase() === 'y' ? defaultName : answers.actName;
-            this.actName = changeCase.paramCase(actName);
+            this.actName = _.kebabCase(actName);
             this.gitName = this.user.git.name();
             this.gitEmail = this.user.git.email();
             done();
@@ -30,6 +30,7 @@ module.exports = generators.Base.extend({
     // 创建文件结构
     makeProjectDirectoryStructure: function() {
         this.template('_package.json', 'package.json');
+        this.template('_bower.json', 'bower.json');
 
         this.copy('jshintrc', '.jshintrc');
 

@@ -1,7 +1,7 @@
 'use strict';
 
 var generators = require('yeoman-generator');
-var changeCase = require('change-case');
+var _ = require('lodash');
 
 module.exports = generators.Base.extend({
     constructor: function () {
@@ -11,16 +11,17 @@ module.exports = generators.Base.extend({
         // This makes `viewName` a required argument.
         this.argument('viewName', { type: String, required: true });
         // And you can then access it later on this way;
-        this.viewName = changeCase.paramCase(this.viewName);
+        this.viewName = _.kebabCase(this.viewName);
     },
 
     // 创建文件结构
     makeProjectDirectoryStructure: function () {
         // 固定入口文件为 `views/${viewName}/index.${html|js}`
         var viewFilePath = 'views/' + this.viewName;
-        this.copy('index.js', viewFilePath + '/index.js');
-        this.copy('index.less', viewFilePath + '/index.less');
-        this.template('index.html', viewFilePath + '/index.html');
+        var viewFileName = viewFilePath + '/' + this.viewName;
+        this.copy('index.js', viewFileName + '.js');
+        this.copy('index.less', viewFileName + '.less');
+        this.template('_index.html', viewFileName + '.html');
         // 模拟数据
         this.template('backend-data.json', viewFilePath + '/backend-data.json');
     }

@@ -1,16 +1,17 @@
 {
   "name": "<%= actName %>",
   "version": "0.0.0",
+  "description": "UC Activity <%= actName %>",
+  "main": "server/app.js",
   "private": true,
-  "engines": {
-    "node": ">=4.0.0"
-  },
   "scripts": {
-    "start": "DEBUG=true node server/app.js"
+    "watch": "scrat release -wL",
+    "start": "scrat server start",
+    "release": "scrat release -ompd ../"
   },
   "keywords": [
     "activity",
-    "generator"
+    "<%= actName %>"
   ],
   "author": {
     "name": "<%= gitName %>",

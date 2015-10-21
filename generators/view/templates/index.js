@@ -5,8 +5,4 @@ var data = window.__data || {};
 console.log(data);
 
 // 使用 CommonJS 编写代码
-var ex = require('../../components/example/example');
-ex();
-
-
-require('../../components/miao/miao');
+// var cmp = require('../../components/cmpname');
