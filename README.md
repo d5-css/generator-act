@@ -7,6 +7,8 @@
 
 ```
 $ npm install -g yo
+$ npm install -g scrat-preprocessor-i18n
+$ npm install -g scrat-postprocessor-browserify
 $ npm install -g generator-act
 ```
 

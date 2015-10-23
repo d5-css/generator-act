@@ -1,7 +1,7 @@
 'use strict';
 
 
-var I18N = process.env.I18N || 'en';
+var I18N = process.env.I18N || '<%= i18n %>';
 
 // uae 配置的 path
 fis.config.set('base.path', '<%= actName %>');

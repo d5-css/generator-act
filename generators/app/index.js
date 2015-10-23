@@ -14,14 +14,21 @@ module.exports = generators.Base.extend({
     promptActName: function() {
         var done = this.async();
         var defaultName = _.kebabCase(this.appname); // Default to current folder name
-        this.prompt({
+        this.prompt([{
             type: 'input',
             name: 'actName',
             message: 'Your project name',
             default: defaultName
-        }, function(answers) {
+        }, {
+            type: 'confirm',
+            name: 'needI18N',
+            message: 'Need internationalization (i18n)',
+            default: false
+        }], function (answers) {
             var actName = answers.actName.toLowerCase() === 'y' ? defaultName : answers.actName;
             this.actName = _.kebabCase(actName);
+            this.needI18N = !!answers.needI18N;
+            this.i18n = this.needI18N ? 'en' : 'i18n';
             this.gitName = this.user.git.name();
             this.gitEmail = this.user.git.email();
             done();
@@ -37,26 +44,25 @@ module.exports = generators.Base.extend({
         this.copy('jshintrc', '.jshintrc');
         this.copy('release.sh', 'release.sh');
 
-        this.directory('fis', 'fis');
-        this.directory('i18n', 'i18n');
+        this.copy('fis/fis.js', 'fis/fis.js');
+        this.copy('fis/prepackager.js', 'fis/prepackager.js');
+        this.template('fis/_roadmap.path.js', 'fis/roadmap.path.js');
+
+        this.template('i18n/_i18n.json', 'i18n/' + this.i18n + '.json');
         this.directory('server', 'server');
     },
 
+    // it seems we DO NOT need npm install
     // npm install depedencies
-    install: function() {
-        if (!this.options['skip-install']) {
-            this.log(chalk.cyan('> ') + 'npm install');
-            this.npmInstall(null, null, function () {
-                this._showTips();
-            }.bind(this));
-        } else {
-            this._showTips();
-        }
-    },
+    // install: function() {
+    //     if (!this.options['skip-install']) {
+    //         this.log(chalk.cyan('> ') + 'npm install');
+    //         this.npmInstall();
+    //     }
+    // },
 
-    // show sub-cmd tips
-    // 下划线开头的 key 不会默认执行
-    _showTips: function() {
+    // show sub-cmd tips when `end`
+    end: function() {
         this.log(
             '\n' +
             chalk.cyan('Tips ') +

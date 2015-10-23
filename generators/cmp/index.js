@@ -52,29 +52,9 @@ module.exports = generators.Base.extend({
                 this.bowerInstall(cmpnt, {
                     save: true
                 });
-                /* 手动下载。。。
-                var path = require('path');
-                var bower = require('bower');
-                var chalk = require('chalk');
-                // tips
-                this.log(chalk.cyan('installing ') + cmpnt);
-                bower.commands
-                    .install([cmpnt], { save: true })
-                    .on('end', (function (installed) {
-                        var destinationRoot = this.destinationRoot();
-                        // set browserify alias
-                        if (!_.isObject(packageContent.browser)) {
-                            packageContent.browser = {};
-                        }
-                        _.forOwn(installed, function (val, key) {
-                            var mainFile = path.join(val.canonicalDir,(val.pkgMeta || '').main || 'index.js');
-                            packageContent.browser[key] = './' + path.relative(destinationRoot, mainFile).replace(/\\/g, '/');
-                        });
-                        // write package.json
-                        this.fs.writeJSON(PACKAGE_JSON_PATH, packageContent, null, 4);
-                    }).bind(this));
-                 */
                 break;
+            default:
+                this.log(this.help());
         }
     }
 });
