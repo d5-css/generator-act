@@ -6,7 +6,7 @@ var UNIT_DATA_REG = /\sdata\s*=\s*"([^"]+)"/;
 
 var BACKEND_DATA = fis.config.get('backend.data');
 var BACKEND_DATA_REG = BACKEND_DATA.reg;
-var BACKEND_DATA_IMPORT = '`args String ' + BACKEND_DATA.server + ';\n';
+var BACKEND_DATA_IMPORT = '`args String ' + BACKEND_DATA.server + '\n';
 var BACKEND_DATA_ARG = '${' + BACKEND_DATA.server + '}';
 
 module.exports = function (ret, conf, settings, opt) {
@@ -40,9 +40,13 @@ module.exports = function (ret, conf, settings, opt) {
                         m = '<!-- ' + m + ' -->';
                     }
                     return m;
-                })
-                // 替换 BACKEND_DATA
-                .replace(BACKEND_DATA_REG, function () {
+                });
+            // 如果 -p 打包，则转义 play 特殊字符
+            if (opt.pack) {
+                content = content.replace(/(`|@|\$|~)/g, '~$1');
+            }
+            // 替换 BACKEND_DATA
+            content = content.replace(BACKEND_DATA_REG, function () {
                     if (opt.pack) {
                         // 如果 -p 打包，则替换成 play 参数
                         needBackendImport = true;
