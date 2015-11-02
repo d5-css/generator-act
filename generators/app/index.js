@@ -20,6 +20,11 @@ module.exports = generators.Base.extend({
             message: 'Your project name',
             default: defaultName
         }, {
+            type: 'input',
+            name: 'gitAddress',
+            message: 'Your git HOST address',
+            default: ''
+        }, {
             type: 'confirm',
             name: 'needI18N',
             message: 'Need internationalization (i18n)',
@@ -27,6 +32,7 @@ module.exports = generators.Base.extend({
         }], function (answers) {
             var actName = answers.actName.toLowerCase() === 'y' ? defaultName : answers.actName;
             this.actName = _.kebabCase(actName);
+            this.gitAddress = (answers.gitAddress || '').replace(/^http[s]?:\/\//, '').replace(/\/.*$/, '');
             this.needI18N = !!answers.needI18N;
             this.i18n = this.needI18N ? 'en' : 'i18n';
             this.gitName = this.user.git.name();

@@ -17,6 +17,11 @@
     "name": "<%= gitName %>",
     "email": "<%= gitEmail %>"
   },
+  <% if (gitAddress) { %>
+  "act": {
+    "git": "<%= gitAddress %>"
+  },
+  <% } %>
   "devDependencies": {
     "express": "^4.13.3"
   }
