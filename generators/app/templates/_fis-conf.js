@@ -8,7 +8,7 @@ fis.config.set('base.path', '<%= actName %>');
 // 当前要构建的语言
 fis.config.set('base.i18n', I18N);
 // 后端 japid 目录
-fis.config.set('backend.japid', 'app/japidviews/FrontendController');
+fis.config.set('backend.japid', 'app/japidsource/japidviews/FrontendController');
 // 后端静态资源目录
 fis.config.set('backend.static', 'public');
 // 后端渲染数据

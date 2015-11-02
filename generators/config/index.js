@@ -29,6 +29,8 @@ module.exports = generators.Base.extend({
             }
             packageContent.act[this.confName] = this.confValue;
             // write package.json
+            // 强制更新文件
+            this.conflicter.force = true;
             this.fs.writeJSON(PACKAGE_JSON_PATH, packageContent, null, 4);
         } catch (e) {
             this.log(e.message);
