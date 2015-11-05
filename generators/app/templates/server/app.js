@@ -4,30 +4,63 @@ var path = require('path');
 var fs = require('fs');
 var express = require('express');
 var bodyParser = require('body-parser');
-var multer = require('multer');
-var upload = multer(); // for parsing multipart/form-data
+
 var BASE_DIR = path.join(__dirname, '..');
-var PORT = process.env.PORT || 5000;
-var app = express();
-var pkgFilePath = '../package.json';
-var pkg = require(pkgFilePath);
-var pkgName = pkg.name;
+var PKG_FILE_PATH = '../package.json';
+var PKG_NAME = require(PKG_FILE_PATH).name;
+var DEFAULT_I18N = 'default';
 var EXT_HTML = 'html';
 
-
-app.use(bodyParser.raw()); // to support JSON-encoded bodies
+var app = express();
+app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
     extended: true
 }));
+
 app.use(express.static(BASE_DIR, {}));
 
-
-function url(path) {
-    return '/' + pkgName + path;
+/**
+ * 给 url 添加 path
+ * @param  {string} path url
+ * @return {string}      完整的 url
+ */
+function urlPath(path) {
+    var SLASH = '/';
+    path = path || '';
+    if (path[0] !== SLASH) {
+        path = SLASH + path;
+    }
+    return SLASH + PKG_NAME + path;
 }
 
+function generate404(tips) {
+    return [
+        '<html><body>',
+            '<h1>404</h1>',
+            '<p>',
+                tips,
+            '</p>',
+        '</body></html>'
+    ].join('');
+}
 
-/*** {{{{{{{{{ 请在这里编写你的业务逻辑
+/*** {{{{{{{{{ 请在这里编写你的业务逻辑 */
+
+/**
+ * 上传文件示例
+ * 使用 https://github.com/expressjs/multer
+var upload = require('multer')(); // for parsing multipart/form-data
+app.post(
+    urlPath('/upload'),
+    upload.single('filekey'), // filekey 为上传文件的参数名
+    function (req, res) {
+        console.log(req.file);
+        res.send({
+            success: true
+        });
+    }
+);
+*/
 
 
 
@@ -35,34 +68,41 @@ function url(path) {
 
 
 
-
-
-/***  ----END---- }}}}}}}}}*/
+/***  ----END---- }}}}}}}}} */
 
 
 /**
  * @Important!!
  * 请保持这段代码在最后的位置，保证页面路由(/:pageName)的优先级不会高过于其它
  */
-app.get(url('/:pageName'), function (req, res) {
+app.get(urlPath('/:pageName'), function (req, res) {
     var pageName = req.params.pageName;
     var la = req.query.la;
-    var fileName = pageName + '_' + (la || 'default') + '.' + EXT_HTML;
-    var filePath = path.resolve(BASE_DIR, './' + pkgName, fileName);
-    try{
+    var fileName = pageName + '_' + (la || DEFAULT_I18N) + '.' + EXT_HTML;
+    var filePath = path.resolve(BASE_DIR, './' + PKG_NAME, fileName);
+    function tips404 () {
+        return [
+            'page `',
+            pageName,
+            '` with i18n `',
+            la,
+            '` NOT found!'
+        ].join('');
+    }
+    try {
         var stats = fs.lstatSync(filePath);
         if (stats.isFile()) {
             res.sendFile(filePath);
         } else {
-            res.status(400).send('404');
+            res.status(400).send(generate404(tips404()));
         }
     } catch(e) {
-        res.status(400).send('404');
+        res.status(400).send(generate404(tips404()));
     }
 });
 
 
-
+var PORT = process.env.PORT || 5000;
 app.listen(PORT, function() {
-    console.log('Express server listening on port %d', PORT);
+    console.log('Server start! http://127.0.0.1:%d/%s/<view-name>', PORT, PKG_NAME);
 });

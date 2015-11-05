@@ -13,13 +13,8 @@ module.exports = [
         reg: /^\/views\/([^\/]+)\/\1\.html$/,
         isLayout: true,
         useCache : false, // 不用人肉添加 cache 文件依赖
-        <% if (needI18N) { %>
-        release: '/${base.path}/$1.${base.i18n}.html',
-        packRelease: '/${backend.japid}/$1.${base.i18n}.html'
-        <% } else { %>
-        release: '/${base.path}/$1.html',
-        packRelease: '/${backend.japid}/$1.html'
-        <% } %>
+        release: '/${base.path}/$1_${base.i18n}.html',
+        packRelease: '/${backend.japid}/$1_${base.i18n}.html'
     },
     {
         // 入口页面 js css 文件

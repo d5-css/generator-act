@@ -54,7 +54,7 @@ module.exports = generators.Base.extend({
             // 读取 git 配置
             var gitLocation = (packageContent.act || '').git || '';
             if (gitLocation) {
-                cmpnt = 'git@' + gitLocation + ':' + cmpnt;
+                cmpnt = 'git@' + gitLocation.replace(/^https?:\/\//, '').replace(/\/.*$/, '') + ':' + cmpnt;
             }
         }
         // 通过 bower 下载

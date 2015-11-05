@@ -4,6 +4,8 @@ var generators = require('yeoman-generator');
 var chalk = require('chalk');
 var _ = require('lodash');
 
+var DEFAULT_I18N = 'default';
+
 module.exports = generators.Base.extend({
     constructor: function() {
         // Calling the super constructor is important so our generator is correctly set up
@@ -14,6 +16,18 @@ module.exports = generators.Base.extend({
     promptActName: function() {
         var done = this.async();
         var defaultName = _.kebabCase(this.appname); // Default to current folder name
+        var defaultGitHost = '';
+
+        // 读取 package.json 设置默认值
+        try {
+            var PACKAGE_JSON_PATH = './package.json';
+            var packageContent = this.fs.readJSON(PACKAGE_JSON_PATH);
+            defaultName = packageContent.name;
+            defaultGitHost = packageContent.act.git;
+        } catch (e) {
+        }
+
+
         this.prompt([{
             type: 'input',
             name: 'actName',
@@ -23,18 +37,12 @@ module.exports = generators.Base.extend({
             type: 'input',
             name: 'gitAddress',
             message: 'Your git HOST address',
-            default: ''
-        }, {
-            type: 'confirm',
-            name: 'needI18N',
-            message: 'Need internationalization (i18n)',
-            default: false
+            default: defaultGitHost
         }], function (answers) {
             var actName = answers.actName.toLowerCase() === 'y' ? defaultName : answers.actName;
             this.actName = _.kebabCase(actName);
-            this.gitAddress = (answers.gitAddress || '').replace(/^http[s]?:\/\//, '').replace(/\/.*$/, '');
-            this.needI18N = !!answers.needI18N;
-            this.i18n = this.needI18N ? 'en' : 'i18n';
+            this.gitAddress = (answers.gitAddress || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+            this.i18n = DEFAULT_I18N;
             this.gitName = this.user.git.name();
             this.gitEmail = this.user.git.email();
             done();
@@ -50,12 +58,10 @@ module.exports = generators.Base.extend({
         this.copy('jshintrc', '.jshintrc');
         this.copy('release.sh', 'release.sh');
 
-        this.copy('fis/fis.js', 'fis/fis.js');
-        this.copy('fis/prepackager.js', 'fis/prepackager.js');
-        this.template('fis/_roadmap.path.js', 'fis/roadmap.path.js');
+        this.directory('fis', 'fis');
+        this.directory('server', 'server');
 
         this.template('i18n/_i18n.json', 'i18n/' + this.i18n + '.json');
-        this.directory('server', 'server');
     },
 
     // it seems we DO NOT need npm install
