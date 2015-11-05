@@ -1,10 +1,11 @@
 'use strict';
 
 
+var pkg = require('./package.json');
 var I18N = process.env.I18N || '<%= i18n %>';
 
 // uae 配置的 path
-fis.config.set('base.path', '<%= actName %>');
+fis.config.set('base.path', pkg.name);
 // 当前要构建的语言
 fis.config.set('base.i18n', I18N);
 // 后端 japid 目录
