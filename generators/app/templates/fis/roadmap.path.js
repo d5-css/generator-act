@@ -17,11 +17,11 @@ module.exports = [
         packRelease: '/${backend.japid}/$1_${base.i18n}.html'
     },
     {
-        // 入口页面 js css 文件
-        reg: /^\/views\/([^\/]+)\/([^\/]+)\.(js|css|scss|less)$/,
+        // 入口页面 其他静态文件
+        reg: /^\/views\/([^\/]+)\/(.*)$/,
         isLayout: true,
-        release: '/${base.path}/${backend.static}/$2.$3',
-        packRelease: '/${backend.static}/$2.$3'
+        release: '/${base.path}/${backend.static}/$2',
+        packRelease: '/${backend.static}/$2'
     },
     {
         // 组件模板

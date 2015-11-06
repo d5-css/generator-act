@@ -70,6 +70,9 @@ module.exports = function (ret, conf, settings, opt) {
         // 如果 -p 打包且指定了 packRelease，则替换 release 路径
         if (opt.pack && file.hasOwnProperty('packRelease')) {
             file.release = file.packRelease;
+            if (typeof file.release === 'string') {
+                file.release = file.release.replace(/\.(less|scss|sass)$/, '.css');
+            }
         }
     });
 
