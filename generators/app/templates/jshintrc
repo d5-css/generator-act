@@ -14,7 +14,7 @@
     "noarg": true,
     "node": true,
     "noempty": true,
-    "predef": ["fis"],
+    "predef": ["fis", "__uri", "__BACKEND_DATA__"],
     "quotmark": "single",
     "undef": true,
     "unused": true,

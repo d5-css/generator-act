@@ -6,7 +6,8 @@
 ## 安装
 
 ```
-npm install -g yo bower generator-act scrat scrat-preprocessor-i18n scrat-postprocessor-browserify
+npm i -g yo bower generator-act
+npm i -g scrat scrat-preprocessor-i18n fis-prepackager-browserify
 ```
 
 ## 使用
