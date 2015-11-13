@@ -1,13 +1,13 @@
 # generator-act 
 
-> [Yeoman](http://yeoman.io) generator
+[![NPM](https://nodei.co/npm/generator-act.png)](https://nodei.co/npm/generator-act/)
 
 
 ## 安装
 
 ```
 npm i -g yo bower generator-act
-npm i -g scrat scrat-preprocessor-i18n fis-prepackager-browserify
+npm i -g scrat fis-prepackager-i18n fis-prepackager-browserify
 ```
 
 ## 使用
@@ -68,6 +68,13 @@ yo act:i18n <language>
 ```
 
 其中 `language` 为语言名称，如 `en`，`ru` 等
+
+
+### 查看当前工具版本
+
+```
+yo act:v
+```
 
 ## License
 

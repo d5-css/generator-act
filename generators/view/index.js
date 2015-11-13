@@ -11,7 +11,7 @@ module.exports = generators.Base.extend({
         // This makes `viewName` a required argument.
         this.argument('viewName', { type: String, required: true });
         // And you can then access it later on this way;
-        this.viewName = _.kebabCase(this.viewName);
+        this.viewName = _.camelCase(this.viewName).toLowerCase();
     },
 
     // 创建文件结构
