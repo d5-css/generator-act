@@ -13,8 +13,8 @@ module.exports = [
         reg: /^\/views\/([^\/]+)\/\1\.html$/,
         isLayout: true,
         useCache : false, // 不用人肉添加 cache 文件依赖
-        release: '/${base.path}/$1_${base.i18n}.html',
-        packRelease: '/${backend.japid}/$1_${base.i18n}.html'
+        release: '/${base.path}/$1.html',
+        packRelease: '/${backend.japid}/$1.html'
     },
     {
         // 入口页面 其他静态文件
@@ -31,7 +31,7 @@ module.exports = [
     },
     {
         // 组件 js css
-        reg: /^\/(bower_)?components\/([^\/]+)\/\1\.(js|css|scss|less)$/,
+        reg: /^\/(bower_)?components\/([^\/]+)\/\2\.(js|css|scss|less)$/,
         release: false
     },
     {

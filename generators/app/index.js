@@ -42,7 +42,6 @@ module.exports = generators.Base.extend({
             var actName = answers.actName.toLowerCase() === 'y' ? defaultName : answers.actName;
             this.actName = _.kebabCase(actName);
             this.gitAddress = (answers.gitAddress || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '');
-            this.i18n = DEFAULT_I18N;
             this.gitName = this.user.git.name();
             this.gitEmail = this.user.git.email();
             done();
@@ -53,7 +52,7 @@ module.exports = generators.Base.extend({
     makeProjectDirectoryStructure: function() {
         this.template('_package.json', 'package.json');
         this.template('_bower.json', 'bower.json');
-        this.template('_fis-conf.js', 'fis-conf.js');
+        this.copy('fis-conf.js', 'fis-conf.js');
 
         this.copy('jshintrc', '.jshintrc');
         this.copy('release.sh', 'release.sh');
@@ -61,7 +60,8 @@ module.exports = generators.Base.extend({
         this.directory('fis', 'fis');
         this.directory('server', 'server');
 
-        this.template('i18n/_i18n.json', 'i18n/' + this.i18n + '.json');
+        this.i18n = DEFAULT_I18N;
+        this.template('i18n/_i18n.json', 'i18n/' + DEFAULT_I18N + '.json');
     },
 
     // it seems we DO NOT need npm install

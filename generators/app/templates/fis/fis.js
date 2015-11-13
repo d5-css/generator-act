@@ -8,13 +8,17 @@ module.exports = function () {
     // roadmap.path
     fis.config.set('roadmap.path', require('./roadmap.path'));
 
-    // i18n preprocessor
-    fis.config.set('settings.preprocessor.i18n', {
-        i18n: fis.config.get('base.i18n')
-    }); 
-    fis.config.set('modules.preprocessor.html', 'i18n');
+    // less with sourceMap
+    fis.config.set('settings.parser.less', {
+        sourceMap: true
+    });
 
-    // browserify prepackager
+    // sttings: i18n prepackager
+    // https://github.com/csbun/fis-prepackager-i18n
+    fis.config.set('settings.prepackager.i18n', {});
+
+    // sttings: browserify prepackager
+    // https://github.com/csbun/fis-prepackager-browserify
     fis.config.set('settings.prepackager.browserify', {
         // browserify opts
         browserify: {
@@ -28,5 +32,5 @@ module.exports = function () {
             preserveLineBreaks: true
         }
     });
-    fis.config.set('modules.prepackager', 'browserify');
+    fis.config.set('modules.prepackager', ['i18n', 'browserify']);
 };

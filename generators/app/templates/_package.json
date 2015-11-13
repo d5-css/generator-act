@@ -5,9 +5,10 @@
   "main": "server/app.js",
   "private": true,
   "scripts": {
-    "watch": "scrat server clean; scrat release -wL",
+    "watch": "scrat server clean; scrat release -cwL",
     "start": "scrat server start",
-    "release": "scrat release -pd ../"
+    "release": "scrat release -cpd ../",
+    "ci": "scrat release -compd ../"
   },
   "keywords": [
     "activity",
