@@ -53,9 +53,7 @@ module.exports = generators.Base.extend({
         this.template('_package.json', 'package.json');
         this.template('_bower.json', 'bower.json');
         this.copy('fis-conf.js', 'fis-conf.js');
-
         this.copy('jshintrc', '.jshintrc');
-        this.copy('release.sh', 'release.sh');
 
         this.directory('fis', 'fis');
         this.directory('server', 'server');
