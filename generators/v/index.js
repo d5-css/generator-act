@@ -14,7 +14,12 @@ module.exports = generators.Base.extend({
             chalk.cyan(pkg.name),
             pkg.version
         );
-        this.spawnCommand('npm', ['list', '-g', '--depth=0', 'fis-prepackager-browserify']);
-        this.spawnCommand('npm', ['list', '-g', '--depth=0', 'fis-prepackager-i18n']);
+        this.spawnCommand('npm', [
+            'list',
+            '-g',
+            '--depth=0',
+            'fis-prepackager-browserify',
+            'fis-prepackager-i18n'
+        ]);
     }
 });

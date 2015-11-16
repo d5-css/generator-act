@@ -5,14 +5,13 @@ module.exports = [
     },
     {
         // 入口页面 模拟数据
-        reg: /^\/views\/([^\/]+)\/backend-data.json$/,
-        packRelease: false
+        reg: /^\/views\/([^\/]+)\/backend-data.js$/,
+        release: false
     },
     {
         // 入口页面 html 文件
         reg: /^\/views\/([^\/]+)\/\1\.html$/,
         isLayout: true,
-        useCache : false, // 不用人肉添加 cache 文件依赖
         release: '/${base.path}/$1.html',
         packRelease: '/${backend.japid}/$1.html'
     },
@@ -37,6 +36,11 @@ module.exports = [
     {
         // 组件 package.json
         reg: /^\/(bower_)?components\/([^\/]+)\/package.json$/,
+        release: false
+    },
+    {
+        // 组件 example
+        reg: /^\/bower_components\/([^\/]+)\/example\//,
         release: false
     },
     {

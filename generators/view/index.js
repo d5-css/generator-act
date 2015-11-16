@@ -23,6 +23,6 @@ module.exports = generators.Base.extend({
         this.copy('index.less', viewFileName + '.less');
         this.template('_index.html', viewFileName + '.html');
         // 模拟数据
-        this.template('backend-data.json', viewFilePath + '/backend-data.json');
+        this.template('backend-data.js', viewFilePath + '/backend-data.js');
     }
 });
